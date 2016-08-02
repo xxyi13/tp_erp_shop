@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 商品模型
  * User: fy
  * Date: 16-7-25
  * Time: 下午10:52
@@ -21,10 +21,27 @@ class GoodsModel extends CommonModel
     );
 
     protected $_auto = array(
+        array('bar_code', 'getBarCode', self::MODEL_INSERT, 'function'),
         array('created_at', 'datetime', self::MODEL_INSERT, 'function'),
         array('updated_at', '0000-00-00 00:00:00', self::MODEL_INSERT),
         array('deleted_at', '0000-00-00 00:00:00', self::MODEL_INSERT),
         array('updated_at', 'datetime', self::MODEL_UPDATE, 'function'),
     );
+
+
+    public function getGoodsList($type = '')
+    {
+        $map = [];
+        if( !empty($type) ) {
+            $map['type'] = $type;
+        }
+        $list = $this->where($map)->field('id, name, spec, unit, st_quantity')->select();
+
+        foreach ($list as $key=>&$value) {
+            $value['st_quantity'] += D('InvoiceInfo')->where(['goods_id'=>$value['id']])->sum('qty');
+        }
+
+        return $list;
+    }
 
 }

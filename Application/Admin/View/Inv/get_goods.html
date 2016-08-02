@@ -1,0 +1,85 @@
+<extend name="Public:inv" />
+
+<block name="body">
+
+    <div class="row">
+        <div class="col-sm-5 m-b-xs">
+            <select class="input-sm form-control input-s-sm inline">
+                <option value="0">请选择</option>
+                <option value="1">选项1</option>
+                <option value="2">选项2</option>
+                <option value="3">选项3</option>
+            </select>
+        </div>
+        <div class="col-sm-4 m-b-xs">
+            <div data-toggle="buttons" class="btn-group">
+                <label class="btn btn-sm btn-white">
+                    <input type="radio" id="option1" name="options">天</label>
+                <label class="btn btn-sm btn-white">
+                    <input type="radio" id="option2" name="options">周</label>
+                <label class="btn btn-sm btn-white active">
+                    <input type="radio" id="option3" name="options">月</label>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <input type="text" placeholder="请输入关键词" class="input-sm form-control"> <span class="input-group-btn">
+                                    <button type="button" class="btn btn-sm btn-primary"> 搜索</button> </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th></th>
+                <!--<th>编号</th>-->
+                <th>名称</th>
+                <th>分类</th>
+                <th>规格型号</th>
+                <th>条形码</th>
+                <th>仓库</th>
+                <th>计量单位</th>
+                <th>预警：最低库存-最高库存</th>
+                <th>价格：采购价-零售价-批发价-VIP价格</th>
+                <th>折扣1-折扣2(%)</th>
+                <th>期初:数量-单位成本-总价</th>
+                <th>剩余库存</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="_list" id="vo">
+                <tr>
+                    <td>
+                        <input type="checkbox" name="" value="{$vo.id}" >
+                    </td>
+                    <!--<td>{$vo['id']}</td>-->
+                    <td>{$vo['name']}</td>
+                    <td>{$goods_category[$vo['category']]}</td>
+                    <td>{$vo['spec']}</td>
+                    <td>{$vo['bar_code']}</td>
+                    <td>{$goods_storage_house[$vo['storage_house']]}</td>
+                    <td>{$unit_list[$vo['unit']]}</td>
+                    <td>{$vo['min_inventory']}-{$vo['max_inventory']}</td>
+                    <td>{$vo['purchase_price']}-{$vo['sale_price']}-{$vo['wholesale_price']}-{$vo['vip_price']}</td>
+                    <td>{$vo['discount_rate_1']}-{$vo['discount_rate_2']}</td>
+                    <td>{$vo['st_quantity']}-{$vo['st_unit_cost']}-{$vo['st_amount']}</td>
+                    <td>{$vo['total_qty']}</td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+    </div>
+
+</block>
+
+<block name="script">
+    <script>
+        $(function () {
+            $(".click").click(function () {
+               alert($(".goods-table-list tbody tr").length);
+            });
+        });
+    </script>
+</block>

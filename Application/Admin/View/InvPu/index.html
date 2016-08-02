@@ -44,8 +44,8 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">单据编号：</label>
                                 <div class="col-sm-8">
-                                    <input type="hidden" name="bill_no" value="CG201607291350014">
-                                    <span class="input-sm form-control">CG201607291350014</span>
+                                    <input type="hidden" name="bill_no" value="{$bill_no}">
+                                    <span class="input-sm form-control">{$bill_no}</span>
                                 </div>
                             </div>
                         </div>
@@ -54,12 +54,12 @@
 
                     <div class="hr-line-dashed" style="margin: auto;"></div>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive goods-table-list">
                         <table class="table ">
                             <thead>
                             <tr>
                                 <th>
-                                    <a href="javascript:void(0)" class="btn btn-primary btn-xs" title="删除行">new</a>
+                                    <a href="javascript:void(0)" class="btn btn-primary btn-xs add-row" title="删除行">new</a>
                                 </th>
                                 <th>商品</th>
                                 <th>单位</th>
@@ -77,7 +77,9 @@
                                 <volist name="tr_list" id="vo">
                                 <tr id="tr_{$vo}" data-sort="{$vo}">
                                     <td>{$vo}</td>
-                                    <td><input type="text" name="data[goods_id]" value="" class="input-sm form-control"></td>
+                                    <td>
+                                        <input type="text" name="data[goods_id]" value="" class="input-sm form-control" data-toggle="modal" data-target=".bs-example-modal-lg" href="{:U('getGoods')}">
+                                    </td>
                                     <td>
                                         <input type="text" name="data[unit]" value="" class="input-sm form-control">
                                     </td>
@@ -103,17 +105,12 @@
                                         <input type="text" name="" value="" class="input-sm form-control">
                                     </td>
                                     <td>
-                                        <a href="javascript:void(0)" class="btn btn-warning btn-xs del" title="删除行">删除</a>
+                                        <a href="javascript:void(0)" class="btn btn-warning btn-xs del-row" title="删除行">删除</a>
                                     </td>
                                 </tr>
                                 </volist>
                             </tbody>
                         </table>
-
-
-
-
-
                     </div>
 
                     <div class="hr-line-dashed" style="margin: auto;"></div>
@@ -215,26 +212,58 @@
 
     </div>
 
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
 </block>
 
 <block name="style">
-    <style>
-        .form-control  { border: none; border-bottom: 1px solid #e5e6e7; width: 90%;padding-left:0px;padding-right: 0px; }
-    </style>
+
 </block>
 
 <block name="script">
     <script>
         $(function () {
 
-           $(".table-responsive").on("click", ".del", function () {
+            /**
+             * 删除行
+             */
+           $(".goods-table-list").on("click", ".del-row", function () {
+
+               if ($(".goods-table-list tbody tr").length <= 1) {
+                   return false;
+               }
                $(this).parent().parent().remove();
 
                $(".table tbody tr").each(function (i, n) {
                    $(n).children().eq(0).text(i+1);
                });
-           })
+           });
 
+
+            /**
+             * 添加行
+             */
+            $(".add-row").click(function () {
+                sort = $(".goods-table-list tbody tr").length + 1;
+
+                html = $(".goods-table-list tbody tr").eq(0).html();
+
+                html = '<tr id="tr_'+sort+'" data-sort="'+sort+'">' + html.replace("<td>1</td>","<td>"+sort+"</td>") + '</tr>';
+                $(".goods-table-list tbody tr").eq(sort - 2).after(html);
+
+            });
         });
     </script>
 </block>

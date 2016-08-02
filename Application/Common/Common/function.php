@@ -18,13 +18,28 @@ function format_datetime( $date ){
     return str_replace("/", "-", $date);
 }
 
+/**
+ * 获取时间格式
+ * @return bool|string
+ */
 function datetime()
 {
     return date('Y-m-d H:i:s');
 }
 
-
+/**
+ * 从数组中获取某个值
+ * @param $inputs
+ * @param $key
+ * @param string $default
+ * @return string
+ */
 function getValue($inputs, $key, $default='')
 {
     return isset($inputs[$key]) ? $inputs[$key] : $default;
+}
+
+function getBarCode()
+{
+    return 0;
 }

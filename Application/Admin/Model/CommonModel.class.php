@@ -46,7 +46,7 @@ abstract class CommonModel extends Model
         } else {
             $re = $model->save($inputs);
         }
-
+        
 
         if( $re !== false ) {
             $this->commit();

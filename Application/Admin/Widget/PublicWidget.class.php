@@ -34,6 +34,13 @@ class PublicWidget extends AdminController
 
     }
 
+    /**
+     * 获取账户
+     * @param string $input_name
+     * @param string $account_id
+     * @param bool $disabled
+     * @return bool
+     */
     public function getAccount( $input_name = '', $account_id = '', $disabled = false )
     {
         if( empty($input_name) ) {
@@ -48,7 +55,13 @@ class PublicWidget extends AdminController
 
     }
 
-
+    /**
+     * 获取销售或者购货人
+     * @param string $input_name
+     * @param string $pur_sale_id
+     * @param bool $disabled
+     * @return bool
+     */
     public function getPurSaleUser( $input_name = '', $pur_sale_id = '', $disabled = false )
     {
 
@@ -63,6 +76,19 @@ class PublicWidget extends AdminController
         $this->display('Widget/get_pur_sale_user');
     }
 
+
+    public function getGoods( $input_name = '', $type = '', $goods_id = '', $disabled = false )
+    {
+        if( empty($input_name) ) {
+            return false;
+        }
+
+        $static = ++self::$static;
+
+        $this->assign(compact('input_name', 'goods_id', 'disabled', 'static', 'type'));
+
+        $this->display('Widget/get_goods');
+    }
 
 
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 单据
  * User: fy
  * Date: 16-7-29
  * Time: 下午2:00
@@ -9,7 +9,7 @@
 namespace Admin\Controller;
 
 
-class InvController extends AdminController
+abstract class InvController extends AdminController
 {
     protected $account_model;     //  账户
 
@@ -32,5 +32,44 @@ class InvController extends AdminController
         $this->invoice_info_model = D('invoice_info');
     }
 
-    
+
+    /**
+     * 获取单据编号
+     */
+    public function getBillNo($prefix = '0')
+    {
+        return C('bill_no_prefix')[$prefix].date('YmdHis').rand(0,9);
+    }
+
+
+    public function getGoods($type = '')
+    {
+        $modal_title = '请选择商品';
+
+        $model = D('Goods');
+
+        $map = [];
+        /*商品类型 成品或半成品*/
+
+        if( !empty($type) ){
+            $map['type'] = $type;
+        }
+
+        $_list = $this->lists($model, $map);
+
+        foreach ($_list as $key=>&$value) {
+            $value['total_qty'] += D('InvoiceInfo')->where(['goods_id'=>$value['id']])->sum('qty');
+        }
+        
+        $goods_category = C('goods_category');
+
+        $unit_list = C('unit_list');
+
+        $goods_storage_house = C('goods_storage_house');
+
+        $this->assign(compact('modal_title', '_list', 'goods_category', 'unit_list', 'goods_storage_house'));
+
+        $this->display('Inv/get_goods');
+    }
+
 }

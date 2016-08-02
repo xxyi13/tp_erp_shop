@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 采购
  * User: fy
  * Date: 16-7-29
  * Time: 下午1:59
@@ -14,9 +14,14 @@ class InvPuController extends InvController
     public function index()
     {
         $tr_list = [1,2,3,4,5];
+
+        $bill_no = $this->getBillNo('1');
         
-        $this->assign(compact('tr_list'));
+        $goods_list = D('Goods')->getGoodsList();
+        
+        $this->assign(compact('tr_list', 'bill_no'));
 
         $this->display();
     }
+
 }

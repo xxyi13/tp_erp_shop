@@ -43,4 +43,16 @@ class AjaxController extends Controller
 
         $this->ajaxReturn($return);
     }
+
+    public function getGoods($type = '')
+    {
+        $list = D('Goods')->getGoodsList($type);
+        
+        $return['message'] = "";
+        $return['value'] = $list;
+        $return['code'] = 200;
+        $return['redirect'] = "";
+
+        $this->ajaxReturn($return);
+    }
 }
