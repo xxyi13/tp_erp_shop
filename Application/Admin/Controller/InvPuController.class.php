@@ -13,7 +13,7 @@ class InvPuController extends InvController
 {
     public function index()
     {
-        $tr_list = [1,2,3,4,5];
+        $tr_list = [1,2];
 
         $bill_no = $this->getBillNo('1');
         

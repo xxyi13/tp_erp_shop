@@ -59,7 +59,8 @@
                             <thead>
                             <tr>
                                 <th>
-                                    <a href="javascript:void(0)" class="btn btn-primary btn-xs add-row" title="删除行">new</a>
+                                    <a href="{:U('getGoods')}" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#goods-modal" title="添加商品">new</a>
+                                    <!--<a href="javascript:void(0)" class="btn btn-primary btn-xs add-row"title="添加商品">new</a>-->
                                 </th>
                                 <th>商品</th>
                                 <th>单位</th>
@@ -74,41 +75,39 @@
                             </tr>
                             </thead>
                             <tbody>
-                                <volist name="tr_list" id="vo">
-                                <tr id="tr_{$vo}" data-sort="{$vo}">
-                                    <td>{$vo}</td>
+                                <!--<tr id="tr_1" data-sort="1">
+                                    <td>1<input type="hidden" name="data[0][goods_id]" value="" class="input-sm form-control"></td>
                                     <td>
-                                        <input type="text" name="data[goods_id]" value="" class="input-sm form-control" data-toggle="modal" data-target=".bs-example-modal-lg" href="{:U('getGoods')}">
+                                        <input type="text" name="data[0][goods_name]" value="" class="input-sm form-control">
                                     </td>
                                     <td>
-                                        <input type="text" name="data[unit]" value="" class="input-sm form-control">
+                                        <input type="text" name="data[0][unit]" value="" class="input-sm form-control">
                                     </td>
                                     <td>
-                                        <input type="text" name="" value="" class="input-sm form-control">
+                                        <input type="text" name="data[0][storage_house]" value="" class="input-sm form-control">
                                     </td>
                                     <td>
-                                        <input type="text" name="" value="" class="input-sm form-control">
+                                        <input type="text" name="data[0][qty]" value="" class="input-sm form-control">
                                     </td>
                                     <td>
-                                        <input type="text" name="" value="" class="input-sm form-control">
+                                        <input type="text" name="data[0][price]" value="" class="input-sm form-control">
                                     </td>
                                     <td>
-                                        <input type="text" name="" value="" class="input-sm form-control">
+                                        <input type="text" name="data[0][discount_rate]" value="" class="input-sm form-control">
                                     </td>
                                     <td>
-                                        <input type="text" name="" value="" class="input-sm form-control">
+                                        <input type="text" name="data[0][deduction]" value="" class="input-sm form-control">
                                     </td>
                                     <td>
-                                        <input type="text" name="" value="" class="input-sm form-control">
+                                        <input type="text" name="data[0][amount]" value="" class="input-sm form-control">
                                     </td>
                                     <td>
-                                        <input type="text" name="" value="" class="input-sm form-control">
+                                        <input type="text" name="data[0][memo]" value="" class="input-sm form-control">
                                     </td>
                                     <td>
                                         <a href="javascript:void(0)" class="btn btn-warning btn-xs del-row" title="删除行">删除</a>
                                     </td>
-                                </tr>
-                                </volist>
+                                </tr>-->
                             </tbody>
                         </table>
                     </div>
@@ -129,7 +128,7 @@
                             <div class="form-group">
                                 <label class="col-sm-5 control-label">购货总金额：</label>
                                 <div class="col-sm-7">
-                                    <input type="text" name="total_amount" value="0.00" class="input-sm form-control">
+                                    <input type="text" name="total_amount" value="0.00" class="input-sm form-control set-amount">
                                 </div>
                             </div>
                         </div>
@@ -138,7 +137,7 @@
                             <div class="form-group">
                                 <label class="col-sm-5 control-label">优惠率(%)：</label>
                                 <div class="col-sm-7">
-                                    <input type="text" name="dis_rate" value="0" class="input-sm form-control">
+                                    <input type="text" name="dis_rate" value="0" class="input-sm form-control set-amount">
                                 </div>
                             </div>
                         </div>
@@ -147,7 +146,7 @@
                             <div class="form-group">
                                 <label class="col-sm-5 control-label">优惠金额：</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="input-sm form-control" name="bill_date" placeholder="" value="0.00">
+                                    <input type="text"  name="dis_amount" placeholder="" class="input-sm form-control set-amount" value="0.00">
                                 </div>
                             </div>
                         </div>
@@ -156,7 +155,7 @@
                             <div class="form-group">
                                 <label class="col-sm-5 control-label">优惠后金额：</label>
                                 <div class="col-sm-7">
-                                    <input type="hidden" class="input-sm form-control" name="amount" placeholder="" value="">
+                                    <input type="hidden" class="input-sm form-control set-amount" name="amount" placeholder="" value="">
                                     <span class="input-sm form-control">0.00</span>
                                 </div>
                             </div>
@@ -212,7 +211,7 @@
 
     </div>
 
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="goods-modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
@@ -241,29 +240,182 @@
              */
            $(".goods-table-list").on("click", ".del-row", function () {
 
-               if ($(".goods-table-list tbody tr").length <= 1) {
-                   return false;
-               }
-               $(this).parent().parent().remove();
+               sort = $(this).parent().parent().attr('data-sort');
 
-               $(".table tbody tr").each(function (i, n) {
-                   $(n).children().eq(0).text(i+1);
-               });
+               $("#tr_"+sort + " :input").attr("readonly", "readonly");
+
+               $("#tr_"+sort).addClass("divider");
+
+               $("input[name='rp_amount']").val('0.00');
+
+               MyInv.countTotalAmount();
+
+               MyInv.countRpAmount();
+
            });
 
+            /**
+             * 设置总体 金额
+             */
+            $(".set-amount").change(function () {
+
+                $("input[name='rp_amount']").val('0.00');
+
+                MyInv.countTotalAmount();
+
+                MyInv.countRpAmount();
+            });
 
             /**
-             * 添加行
+             * 设置每行的金额 数量 折扣
              */
-            $(".add-row").click(function () {
-                sort = $(".goods-table-list tbody tr").length + 1;
+            $(".goods-table-list").on("change", ".set-row-amount", function () {
 
-                html = $(".goods-table-list tbody tr").eq(0).html();
+                $("input[name='rp_amount']").val('0.00');
 
-                html = '<tr id="tr_'+sort+'" data-sort="'+sort+'">' + html.replace("<td>1</td>","<td>"+sort+"</td>") + '</tr>';
-                $(".goods-table-list tbody tr").eq(sort - 2).after(html);
+                i = $(this).parent().parent().attr("data-sort") - 1;
 
+                MyInv.countRowAmount(i);
+
+                MyInv.countTotalAmount();
+
+                MyInv.countRpAmount();
             });
+
+            /**
+             * 设置付款金额
+             */
+            $("input[name='rp_amount']").change(function () {
+                MyInv.countRpAmount();
+            });
+
+
         });
+
+        var MyInv = new Object();
+
+
+        /**
+         * 重新排序
+         */
+        MyInv.setSort = function (){
+            $(".goods-table-list .table tbody tr").each(function (i, n) {
+                sort = i + 1;
+                $(n).children().eq(0).text(sort);
+                $(n).attr('data-sort', sort);
+                $(n).attr('id', 'tr_'+sort);
+            });
+        };
+
+        /**
+         * 添加一行商品
+         */
+        MyInv.addRow = function (data) {
+
+            prev_sort = $(".goods-table-list tbody tr").length;
+
+            next_sort = prev_sort + 1;
+
+            html = '<tr id="tr_'+next_sort+'" data-sort="'+next_sort+'">';
+                html += '<td>'+next_sort+'</td>';
+                html += '<td>';
+                    html += '<input type="hidden" name="data['+prev_sort+'][goods_id]" value="'+data[0]+'" class="input-sm form-control">';
+                    html += '<input type="text" name="data['+prev_sort+'][goods_name]" value="'+data[1]+'" class="input-sm form-control">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][unit]" value="'+data[2]+'" class="input-sm form-control">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][storage_house]" value="'+data[3]+'" class="input-sm form-control">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][qty]" value="'+data[4]+'" class="input-sm form-control set-row-amount">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][price]" value="'+data[5]+'" class="input-sm form-control set-row-amount">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][discount_rate]" value="'+data[6]+'" class="input-sm form-control set-row-amount">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][deduction]" value="'+data[7]+'" class="input-sm form-control set-row-amount">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][amount]" value="'+data[8]+'" class="input-sm form-control">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][memo]" value="'+data[9]+'" class="input-sm form-control">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<a href="javascript:void(0)" class="btn btn-warning btn-xs del-row" title="删除行">删除</a>';
+                html += '</td>';
+            html += '</tr>';
+
+            $(".goods-table-list tbody").append(html);
+        };
+
+        /**
+         * 设置整体金额
+         */
+        MyInv.countTotalAmount = function () {
+            total_amount = 0;
+            $(".goods-table-list tbody tr").each(function (i, n) {
+                money = $(n).children("td").eq(8).children("input[name='data["+i+"][amount]']").val();
+
+                total_amount = accAdd( total_amount , money );
+            });
+
+            $("input[name='total_amount']").val(total_amount);
+
+            //  折扣率
+            dis_rate = $("input[name='dis_rate']").val() / 100;
+
+            //  折扣金额
+            dis_amount = accMul( total_amount , dis_rate );
+            $("input[name='dis_amount']").val( dis_amount );
+
+            //  优惠后金额
+            amount = Subtr( total_amount, dis_amount );
+            $("input[name='amount']").val( amount );
+            $("input[name='amount']").next().text( amount );
+        };
+
+
+        /**
+         * 设置单个商品金额
+         */
+        MyInv.countRowAmount = function (i) {
+
+            qty = $("input[name='data["+i+"][qty]']").val();
+
+            price = $("input[name='data["+i+"][price]']").val();
+
+            discount_rate = $("input[name='data["+i+"][discount_rate]']").val() / 100;
+
+            amount = accMul( price , qty );
+
+            deduction = accMul( amount, discount_rate );
+
+            $("input[name='data["+i+"][deduction]']").val( deduction );
+
+            amount = Subtr( amount, deduction );
+            $("input[name='data["+i+"][amount]']").val( amount );
+        };
+
+        /**
+         * 这是 付款 和欠款金额
+         */
+        MyInv.countRpAmount = function () {
+
+            amount =  $("input[name='amount']").val();
+
+            rp_amount = $("input[name='rp_amount']").val();
+
+            arrears = Subtr(rp_amount, amount);
+
+            $("input[name='arrears']").val( arrears );
+            $("input[name='arrears']").next().text(arrears);
+        }
+
     </script>
 </block>

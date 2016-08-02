@@ -52,7 +52,7 @@
             <volist name="_list" id="vo">
                 <tr>
                     <td>
-                        <input type="checkbox" name="" value="{$vo.id}" >
+                        <input type="checkbox" name="goods_id[]" value="{$vo.id}-{$vo['name']}-{$unit_list[$vo['unit']]}-{$goods_storage_house[$vo['storage_house']]}-1-{$vo['purchase_price']}-0-0-{$vo['purchase_price']}-" >
                     </td>
                     <!--<td>{$vo['id']}</td>-->
                     <td>{$vo['name']}</td>
@@ -74,11 +74,36 @@
 
 </block>
 
+<div class="modal-footer">
+    <block name="footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="modal-add-goods">选择并添加</button>
+    </block>
+</div>
+
 <block name="script">
     <script>
         $(function () {
-            $(".click").click(function () {
-               alert($(".goods-table-list tbody tr").length);
+            $("#modal-add-goods").click(function () {
+                $("input[name='goods_id[]']").each(function (i, j) {
+                    if( $(this).is(':checked') ) {
+                        var data = new Array();
+
+                        value = $(this).val();
+
+                        data = value.split('-');
+
+                        MyInv.addRow(data);
+                    }
+                });
+                //  隐藏modal
+                $('#goods-modal').modal('hide');
+
+                //  计算金额
+                MyInv.countTotalAmount();
+
+                //  计算付款欠款
+                MyInv.countRpAmount();
             });
         });
     </script>
