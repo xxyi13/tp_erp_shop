@@ -38,7 +38,7 @@ abstract class InvController extends AdminController
      */
     public function getBillNo($prefix = '0')
     {
-        return C('bill_no_prefix')[$prefix].date('YmdHis').rand(0,9);
+        return C('bill_no_prefix')[$prefix] . date('YmdHis') . rand(0, 9);
     }
 
 
@@ -58,7 +58,7 @@ abstract class InvController extends AdminController
         $_list = $this->lists($model, $map);
 
         foreach ($_list as $key=>&$value) {
-            $value['total_qty'] += D('InvoiceInfo')->where(['goods_id'=>$value['id']])->sum('qty');
+            $value['total_qty'] = $value['st_quantity'] + D('InvoiceInfo')->where(['goods_id'=>$value['id']])->sum('qty');
         }
         
         $goods_category = C('goods_category');

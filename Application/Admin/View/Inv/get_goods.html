@@ -87,13 +87,15 @@
             $("#modal-add-goods").click(function () {
                 $("input[name='goods_id[]']").each(function (i, j) {
                     if( $(this).is(':checked') ) {
-                        var data = new Array();
+                        data = new Array();
 
                         value = $(this).val();
 
                         data = value.split('-');
 
                         MyInv.addRow(data);
+
+                        $(this).attr("checked", false);
                     }
                 });
                 //  隐藏modal
