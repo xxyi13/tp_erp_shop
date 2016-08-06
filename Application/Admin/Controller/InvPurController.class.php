@@ -35,6 +35,9 @@ class InvPurController extends InvController
 
         $this->assign(compact('trans_type', 'bill_no'));
 
+        // 记录当前列表页的cookie
+        Cookie('__forward__',$_SERVER['REQUEST_URI']);
+
         $this->display();
     }
 
@@ -43,7 +46,26 @@ class InvPurController extends InvController
      */
     public function save()
     {
-        dump(I(''));
+        $inputs = I('');
+        
+        $inputs['inv']['bill_type'] = 'PUR';
+
+        $inputs['inv']['__hash__'] = $inputs['__hash__'];
+        
+        if( !empty( (float)$inputs['inv']['arrears']) ) {
+            $this->error( "暂不允许欠款" );
+        }
+
+        if( empty($inputs['data']) ) {
+            $this->error( "请添加商品信息" );
+        }
+        
+        if( $this->model->addInvoiceData( $inputs ) ) {
+            $this->success($this->model->getErrorMsg(), Cookie('__forward__'), self::AJAX_IS_OPEN);
+        }
+
+        $this->error($this->model->getErrorMsg(), '', self::AJAX_IS_OPEN);
+
     }
 
 }

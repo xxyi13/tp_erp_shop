@@ -10,7 +10,7 @@
                     <h5>购货单</h5>
                 </div>
 
-                <form action="{:U('save')}" method="post" class="form-horizontal " id="commentForm" >
+                <form action="{:U('save')}" method="post" class="form-horizontal ajax-form" id="commentForm" >
                     <input type="hidden" name="inv[trans_type]" value="{$trans_type}">
                     <div class="ibox-content">
                         <div class="row">
@@ -116,7 +116,10 @@
                                         <td>合计</td>
                                         <td> </td>
                                         <td> </td>
-                                        <td><span class="input-sm form-control" id="all_qty"></span></td>
+                                        <td>
+                                            <input type="hidden" name="inv[total_qty]" value="0">
+                                            <span class="input-sm form-control" id="all_qty"></span>
+                                        </td>
                                         <td> </td>
                                         <td> </td>
                                         <td><span class="input-sm form-control" id="all_dis_amount"></span></td>
@@ -214,7 +217,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-5 control-label">制单人：</label>
                                     <div class="col-sm-7">
-                                        <span class="input-sm form-control">{:session('user_auth.nickname')}</span>
+                                        <span class="input-sm form-control">{:getAdminUserRealnameById()}</span>
                                     </div>
                                 </div>
                             </div>
@@ -427,6 +430,7 @@
             //  设置table 表格中的汇总计算
             $("#all_amount").text(total_amount);
             $("#all_qty").text(all_qty);
+            $("input[name='inv[total_qty]']").val(all_qty);
             $("#all_dis_amount").text(all_dis_amount);
 
             $("input[name='inv[total_amount]']").val(total_amount);

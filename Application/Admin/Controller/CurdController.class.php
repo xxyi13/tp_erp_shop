@@ -11,10 +11,6 @@ namespace Admin\Controller;
 
 class CurdController extends AdminController
 {
-    protected $model;
-
-    protected $model_name;
-    
     /**
      * 可访问 列表页面
      */

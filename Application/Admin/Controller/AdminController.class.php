@@ -16,6 +16,10 @@ abstract class AdminController extends Controller
 
     const AJAX_IS_OPEN = true;
 
+    protected $model;
+
+    protected $model_name;
+
     public function _initialize()
     {
         /************************************

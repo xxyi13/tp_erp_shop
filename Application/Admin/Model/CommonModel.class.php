@@ -67,7 +67,7 @@ abstract class CommonModel extends Model
     protected function output($status = false, $msg = '')
     {
         $this->error_msg = $msg;
-
+        
         if( empty($msg) ) {
             $this->error_msg = $status ? "操作成功" : "操作失败";
         }
