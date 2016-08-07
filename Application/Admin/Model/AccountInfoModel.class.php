@@ -32,6 +32,8 @@ class AccountInfoModel extends CommonModel
     
     /**
      * 根据 $trans_type 判断账户详情信息的金额的 正负
+     * 正 ： 退货 销售
+     * 负 ： 采购 退销
      * @param $rp_amount
      * @param $trans_type
      */
@@ -39,7 +41,7 @@ class AccountInfoModel extends CommonModel
     {
         $trans_type = I("inv")['trans_type'];
 
-        $array = ['11'];
+        $array = ['11', '22'];
 
         if( in_array($trans_type, $array) ) {
             return '-'.abs($payment);

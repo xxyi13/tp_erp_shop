@@ -16,9 +16,9 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <label class="col-sm-4 control-label">供应商：</label>
+                                    <label class="col-sm-4 control-label">客户：</label>
                                     <div class="col-sm-8">
-                                        {:W('Public/getBusiness',array('input_name'=>'inv[bus_id]','type'=>'2'))}
+                                        {:W('Public/getBusiness',array('input_name'=>'inv[bus_id]','type'=>'1'))}
                                     </div>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
 
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <label class="col-sm-4 control-label">购货人：</label>
+                                    <label class="col-sm-4 control-label">销货人：</label>
                                     <div class="col-sm-8">
                                         {:W('Public/getPurSaleUser',array('input_name'=>'inv[pur_sale_id]'))}
                                     </div>
@@ -67,66 +67,66 @@
                                     <th>单位</th>
                                     <th>仓库</th>
                                     <th>数量</th>
-                                    <th>购货单价</th>
+                                    <th>销货单价</th>
                                     <th>折扣率(%)</th>
                                     <th>折扣额</th>
-                                    <th>购货金额</th>
+                                    <th>销货金额</th>
                                     <th>备注</th>
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <!--<tr id="tr_1" data-sort="1">
-                                        <td>1<input type="hidden" name="data[0][goods_id]" value="" class="input-sm form-control"></td>
-                                        <td>
-                                            <input type="text" name="data[0][goods_name]" value="" class="input-sm form-control">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="data[0][unit]" value="" class="input-sm form-control">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="data[0][storage_house]" value="" class="input-sm form-control">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="data[0][qty]" value="" class="input-sm form-control">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="data[0][price]" value="" class="input-sm form-control">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="data[0][dis_rate]" value="" class="input-sm form-control">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="data[0][dis_amount]" value="" class="input-sm form-control">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="data[0][amount]" value="" class="input-sm form-control">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="data[0][memo]" value="" class="input-sm form-control">
-                                        </td>
-                                        <td>
-                                            <a href="javascript:void(0)" class="btn btn-warning btn-xs del-row" title="删除行">删除</a>
-                                        </td>
-                                    </tr>-->
+                                <!--<tr id="tr_1" data-sort="1">
+                                    <td>1<input type="hidden" name="data[0][goods_id]" value="" class="input-sm form-control"></td>
+                                    <td>
+                                        <input type="text" name="data[0][goods_name]" value="" class="input-sm form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="data[0][unit]" value="" class="input-sm form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="data[0][storage_house]" value="" class="input-sm form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="data[0][qty]" value="" class="input-sm form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="data[0][price]" value="" class="input-sm form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="data[0][dis_rate]" value="" class="input-sm form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="data[0][dis_amount]" value="" class="input-sm form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="data[0][amount]" value="" class="input-sm form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="data[0][memo]" value="" class="input-sm form-control">
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0)" class="btn btn-warning btn-xs del-row" title="删除行">删除</a>
+                                    </td>
+                                </tr>-->
                                 </tbody>
                                 <tfoot style="display: none">
-                                    <tr>
-                                        <td> </td>
-                                        <td>合计</td>
-                                        <td> </td>
-                                        <td> </td>
-                                        <td>
-                                            <input type="hidden" name="inv[total_qty]" value="0">
-                                            <span class="input-sm form-control" id="all_qty"></span>
-                                        </td>
-                                        <td> </td>
-                                        <td> </td>
-                                        <td><span class="input-sm form-control" id="all_dis_amount"></span></td>
-                                        <td><span class="input-sm form-control" id="all_amount"></span></td>
-                                        <td> </td>
-                                        <td> </td>
-                                    </tr>
+                                <tr>
+                                    <td> </td>
+                                    <td>合计</td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td>
+                                        <input type="hidden" name="inv[total_qty]" value="0">
+                                        <span class="input-sm form-control" id="all_qty"></span>
+                                    </td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td><span class="input-sm form-control" id="all_dis_amount"></span></td>
+                                    <td><span class="input-sm form-control" id="all_amount"></span></td>
+                                    <td> </td>
+                                    <td> </td>
+                                </tr>
                                 </tfoot>
                             </table>
                         </div>
@@ -145,7 +145,7 @@
 
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <label class="col-sm-5 control-label">购货总金额：</label>
+                                    <label class="col-sm-5 control-label">销货总金额：</label>
                                     <div class="col-sm-7">
                                         <input type="text" name="inv[total_amount]" value="0.00" class="input-sm form-control set-amount">
                                     </div>
@@ -182,7 +182,17 @@
 
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <label class="col-sm-5 control-label"><eq name="trans_type" value="12">本次退款：<else/>本次付款：</eq></label>
+                                    <label class="col-sm-5 control-label">客户承担费用：</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="input-sm form-control" name="inv[customer_free]" placeholder="" value="0.00">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label"><eq name="trans_type" value="22">本次退销：<else/>本次收款：</eq></label>
                                     <div class="col-sm-7">
                                         <input type="text" class="input-sm form-control" name="inv[rp_amount]" placeholder="" value="0.00">
                                     </div>
@@ -345,6 +355,11 @@
                 MyInv.countRpAmount();
             });
 
+            $("input[name='inv[customer_free]']").change(function () {
+                MyInv.countRpAmount();
+            });
+
+
 
         });
 
@@ -361,39 +376,39 @@
             next_sort = prev_sort + 1;
 
             html = '<tr id="tr_'+next_sort+'" data-sort="'+next_sort+'">';
-                html += '<td>'+next_sort+'</td>';
-                html += '<td>';
-                    html += '<input type="hidden" name="data['+prev_sort+'][goods_id]" value="'+data[0]+'" class="input-sm form-control">';
-                    html += '<input type="text" name="data['+prev_sort+'][goods_name]" value="'+data[1]+'" class="input-sm form-control">';
-                html += '</td>';
-                html += '<td>';
-                    html += '<input type="text" name="data['+prev_sort+'][unit]" value="'+data[2]+'" class="input-sm form-control">';
-                html += '</td>';
-                html += '<td>';
-                    html += '<input type="text" name="data['+prev_sort+'][storage_house]" value="'+data[3]+'" class="input-sm form-control">';
-                html += '</td>';
-                html += '<td>';
-                    html += '<input type="text" name="data['+prev_sort+'][qty]" value="'+data[4]+'" class="input-sm form-control set-row-amount">';
-                html += '</td>';
-                html += '<td>';
-                    html += '<input type="text" name="data['+prev_sort+'][price]" value="'+data[5]+'" class="input-sm form-control set-row-amount">';
-                html += '</td>';
-                html += '<td>';
-                    html += '<input type="text" name="data['+prev_sort+'][dis_rate]" value="'+data[6]+'" class="input-sm form-control set-row-amount">';
-                html += '</td>';
-                html += '<td>';
-                    html += '<input type="text" name="data['+prev_sort+'][dis_amount]" value="'+data[7]+'" class="input-sm form-control set-row-amount">';
-                html += '</td>';
-                html += '<td>';
-                    html += '<input type="text" name="data['+prev_sort+'][amount]" value="'+data[8]+'" class="input-sm form-control">';
-                html += '</td>';
-                html += '<td>';
-                    html += '<input type="text" name="data['+prev_sort+'][memo]" value="'+data[9]+'" class="input-sm form-control">';
-                html += '</td>';
-                html += '<td>';
-                    html += '<input type="hidden" name="data['+prev_sort+'][is_delete]" value="0" class="input-sm form-control">';
-                    html += '<a href="javascript:void(0)" class="btn btn-warning btn-xs del-row" title="删除行">删除</a>';
-                html += '</td>';
+            html += '<td>'+next_sort+'</td>';
+            html += '<td>';
+            html += '<input type="hidden" name="data['+prev_sort+'][goods_id]" value="'+data[0]+'" class="input-sm form-control">';
+            html += '<input type="text" name="data['+prev_sort+'][goods_name]" value="'+data[1]+'" class="input-sm form-control">';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="text" name="data['+prev_sort+'][unit]" value="'+data[2]+'" class="input-sm form-control">';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="text" name="data['+prev_sort+'][storage_house]" value="'+data[3]+'" class="input-sm form-control">';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="text" name="data['+prev_sort+'][qty]" value="'+data[4]+'" class="input-sm form-control set-row-amount">';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="text" name="data['+prev_sort+'][price]" value="'+data[5]+'" class="input-sm form-control set-row-amount">';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="text" name="data['+prev_sort+'][dis_rate]" value="'+data[6]+'" class="input-sm form-control set-row-amount">';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="text" name="data['+prev_sort+'][dis_amount]" value="'+data[7]+'" class="input-sm form-control set-row-amount">';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="text" name="data['+prev_sort+'][amount]" value="'+data[8]+'" class="input-sm form-control">';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="text" name="data['+prev_sort+'][memo]" value="'+data[9]+'" class="input-sm form-control">';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="hidden" name="data['+prev_sort+'][is_delete]" value="0" class="input-sm form-control">';
+            html += '<a href="javascript:void(0)" class="btn btn-warning btn-xs del-row" title="删除行">删除</a>';
+            html += '</td>';
             html += '</tr>';
 
             $(".goods-table-list tbody").append(html);
@@ -446,7 +461,6 @@
             amount = Subtr( total_amount, dis_amount );
             $("input[name='inv[amount]']").val( amount );
             $("input[name='inv[amount]']").next().text( amount );
-
         };
 
 
@@ -476,14 +490,24 @@
          */
         MyInv.countRpAmount = function () {
 
+            //  优惠后金额
             amount =  $("input[name='inv[amount]']").val();
 
+            //  客户承担费用
+            customer_free = $("input[name='inv[customer_free]']").val();
+
+            //  支付金额
             rp_amount = $("input[name='inv[rp_amount]']").val();
+
 
             arrears = Subtr(rp_amount, amount);
 
+            arrears = Subtr(customer_free, arrears);
+
             $("input[name='inv[arrears]']").val( arrears );
             $("input[name='inv[arrears]']").next().text(arrears);
+
+
         }
 
     </script>

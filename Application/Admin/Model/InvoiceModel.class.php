@@ -14,7 +14,7 @@ class InvoiceModel extends CommonModel
 
     protected $_validate = array(
         array('bill_no', 'require', '单据编号不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
-        array('bus_id', 'require', '供应商编号不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
+//        array('bus_id', 'require', '供应商编号不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('total_amount', 'require', '总金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('amount', 'require', '折扣后的金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('rp_amount', 'require', '本次付款金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
@@ -37,6 +37,7 @@ class InvoiceModel extends CommonModel
         array('total_amount', 'getInvoiceAmount', self::MODEL_BOTH, 'callback'),
         array('amount', 'getInvoiceAmount', self::MODEL_BOTH, 'callback'),
         array('rp_amount', 'getInvoiceAmount', self::MODEL_BOTH, 'callback'),
+        array('arrears', 'getInvoiceArrears', self::MODEL_BOTH, 'callback'),
     );
 
     public function addInvoiceData($inputs = [])
@@ -104,7 +105,7 @@ class InvoiceModel extends CommonModel
             'way_id' => 0,
             'memo' => '',
         ];
-        
+
         $account_info_data = $account_info_model->create($account_info_data);
 
         if( !$account_info_data ) {
@@ -128,16 +129,36 @@ class InvoiceModel extends CommonModel
 
     /**
      * 根据 $trans_type 判断该单据的 总金额 折扣后金额 本次付款金额 的正负
-     * 正 ： 采购 退销
-     * 负 ： 退货 销售
+     * 正 ： 退货 销售
+     * 负 ： 采购 退销
      * @param $amount
      * @param $trans_type
      */
     public function getInvoiceAmount($amount)
     {
         $trans_type = I("inv")['trans_type'];
-        
-        $array = ['12'];
+
+        $array = ['11', '22'];
+
+        if( in_array($trans_type, $array) ) {
+            return '-'.abs($amount);
+        }
+
+        return abs($amount);
+    }
+
+    /**
+     * 根据 $trans_type 判断该单据的 欠款 的正负
+     * 正 ： 退货 销售
+     * 负 ： 采购 退销
+     * @param $amount
+     * @param $trans_type
+     */
+    public function getInvoiceArrears($amount)
+    {
+        $trans_type = I("inv")['trans_type'];
+
+        $array = ['11', '22'];
 
         if( in_array($trans_type, $array) ) {
             return '-'.abs($amount);

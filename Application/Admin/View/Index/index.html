@@ -47,7 +47,7 @@
                             </li>
                             <li><a class="J_menuItem" href="contacts.html">联系我们</a>
                             </li>
-                            <li><a class="J_menuItem" href="mailbox.html">信箱</a>
+                            <li><a class="J_menuItem" href="javascript:void(0)">信箱</a>
                             </li>
                             <li class="divider"></li>
                             <li><a href="{:U('Public/logout')}">安全退出</a>
@@ -97,7 +97,7 @@
                 </li>
 
                 <li>
-                    <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">购货 </span><span class="fa arrow"></span>
+                    <a href="javascript:void(0)"><i class="fa fa-envelope"></i> <span class="nav-label">购货 </span><span class="fa arrow"></span>
                         <!--<span class="label label-warning pull-right">16</span>-->
                     </a>
                     <ul class="nav nav-second-level">
@@ -109,6 +109,18 @@
                     </ul>
                 </li>
 
+                <li>
+                    <a href="javascript:void(0)"><i class="fa fa-envelope"></i> <span class="nav-label">销货 </span><span class="fa arrow"></span>
+                        <!--<span class="label label-warning pull-right">16</span>-->
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="J_menuItem" href="{:U('Admin/InvSale/add', array('trans_type'=>'21'))}">新建销货单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvSale/add', array('trans_type'=>'22'))}">新建销货退货单</a>
+                        </li>
+                    </ul>
+                </li>
 
             </ul>
         </div>
@@ -161,7 +173,7 @@
                             <li class="divider"></li>
                             <li>
                                 <div class="text-center link-block">
-                                    <a class="J_menuItem" href="mailbox.html">
+                                    <a class="J_menuItem" href="javascript:void(0)">
                                         <i class="fa fa-envelope"></i> <strong> 查看所有消息</strong>
                                     </a>
                                 </div>
@@ -174,7 +186,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-alerts">
                             <li>
-                                <a href="mailbox.html">
+                                <a href="javascript:void(0)">
                                     <div>
                                         <i class="fa fa-envelope fa-fw"></i> 您有16条未读消息
                                         <span class="pull-right text-muted small">4分钟前</span>

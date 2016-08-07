@@ -29,29 +29,49 @@ class InvoiceInfoModel extends CommonModel
         array('updated_at', '0000-00-00 00:00:00', self::MODEL_INSERT),
         array('deleted_at', '0000-00-00 00:00:00', self::MODEL_INSERT),
         array('updated_at', 'datetime', self::MODEL_UPDATE, 'function'),
-        array('amount', 'getInvoiceInfoAmountQty', self::MODEL_BOTH, 'callback'),
-        array('qty', 'getInvoiceInfoAmountQty', self::MODEL_BOTH, 'callback'),
+        array('amount', 'getInvoiceInfoAmount', self::MODEL_BOTH, 'callback'),
+        array('qty', 'getInvoiceInfoQty', self::MODEL_BOTH, 'callback'),
     );
 
 
     /**
-     * 根据 $trans_type 判断单据商品信息中商品数量 或者 金额 的 正负
+     * 根据 $trans_type 判断单据商品信息中 金额 的 正负
+     * 正 ： 退货 销售
+     * 负 ： 采购 退销
+     * @param $qty
+     * @param $trans_type
+     */
+    public function getInvoiceInfoAmount($amount)
+    {
+        $trans_type = I("inv")['trans_type'];
+
+        $array = ['11', '22'];
+
+        if( in_array($trans_type, $array) ) {
+            return '-'.abs($amount);
+        }
+
+        return abs($amount);
+    }
+
+    /**
+     * 根据 $trans_type 判断单据商品信息中商品数量 的 正负
      * 正 ： 采购 退销
      * 负 ： 退货 销售
      * @param $qty
      * @param $trans_type
      */
-    public function getInvoiceInfoAmountQty($amount_qty)
+    public function getInvoiceInfoQty($qty)
     {
         $trans_type = I("inv")['trans_type'];
-        
-        $array = ['12'];
+
+        $array = ['12', '21'];
 
         if( in_array($trans_type, $array) ) {
-            return '-'.abs($amount_qty);
+            return '-'.abs($qty);
         }
 
-        return abs($amount_qty);
+        return abs($qty);
     }
 
 
