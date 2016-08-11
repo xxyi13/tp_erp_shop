@@ -1,0 +1,20 @@
+<form action="{:U('?'.$paramstr)}" method="get" class="form-horizontal" id="commentForm">
+    <input type="hidden" name="type" value="{$param['type']}">
+    <div class="col-sm-3">
+        <div class="form-group">
+            {:W('Public/getGoodsCategory',array('input_name'=>'category','category'=>$param['category']))}
+        </div>
+    </div>
+
+    <div class="col-sm-3">
+        <div class="form-group">
+            {:W('Public/getGoods',array('input_name'=>'goods_id','type'=>$param['type'], 'goods_id'=>$param['goods_id']))}
+        </div>
+    </div>
+
+    <div class="col-sm-3">
+        <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-primary"> 搜索</button>
+        </div>
+    </div>
+</form>

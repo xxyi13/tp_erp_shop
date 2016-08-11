@@ -60,7 +60,7 @@
                                 <thead>
                                 <tr>
                                     <th>
-                                        <a href="{:U('getGoods')}" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#goods-modal" title="添加商品">new</a>
+                                        <a href="{:U('getGoods', array('type'=>'1'))}" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#goods-modal" title="添加商品">new</a>
                                         <!--<a href="javascript:void(0)" class="btn btn-primary btn-xs add-row"title="添加商品">new</a>-->
                                     </th>
                                     <th>商品</th>
@@ -385,6 +385,7 @@
             html += '<input type="text" name="data['+prev_sort+'][unit]" value="'+data[2]+'" class="input-sm form-control">';
             html += '</td>';
             html += '<td>';
+            html += '<input type="hidden" name="data['+prev_sort+'][category]" value="'+data[3]+'" class="input-sm form-control">';
             html += '<input type="text" name="data['+prev_sort+'][storage_house]" value="'+data[3]+'" class="input-sm form-control">';
             html += '</td>';
             html += '<td>';

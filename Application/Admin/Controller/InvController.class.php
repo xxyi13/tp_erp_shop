@@ -83,32 +83,9 @@ abstract class InvController extends AdminController
      * 获取商品信息列表
      * @param string $type
      */
-    public function getGoods($type = '')
+    public function getGoods()
     {
-        $modal_title = '请选择商品';
-
-        $model = D('Goods');
-
-        $map = [];
-        /*商品类型 成品或半成品*/
-
-        if( !empty($type) ){
-            $map['type'] = $type;
-        }
-
-        $_list = $this->lists($model, $map);
-
-        foreach ($_list as $key=>&$value) {
-            $value['total_qty'] = $value['st_quantity'] + D('InvoiceInfo')->where(['goods_id'=>$value['id'], 'deleted_at'=>['eq', 0]])->sum('qty');
-        }
-        
-        $goods_category = C('goods_category');
-
-        $unit_list = C('unit_list');
-
-        $goods_storage_house = C('goods_storage_house');
-
-        $this->assign(compact('modal_title', '_list', 'goods_category', 'unit_list', 'goods_storage_house'));
+        $this->getGoodsList();
 
         $this->display('Inv/get_goods');
     }

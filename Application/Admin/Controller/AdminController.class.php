@@ -118,4 +118,56 @@ abstract class AdminController extends Controller
         return $model->field($field)->select();
     }
 
+
+    protected function getGoodsList($type='')
+    {
+        $modal_title = '请选择商品';
+
+        $param = [
+            'goods_id' => I('goods_id', '0'),
+            'storage_house' => I('storage_house', '0'),
+            'category' => I('category', '0'),
+            'type' => I('type', $type)
+        ];
+
+        if( !empty($param['goods_id']) ) {
+            $map['g.id'] = $param['goods_id'];
+        }
+
+        if( !empty($param['storage_house']) ) {
+            $map['g.storage_house'] = $param['storage_house'];
+        }
+
+        if( !empty($param['category']) ) {
+            $map['g.category'] = $param['category'];
+        }
+
+        if( !empty($param['type']) ) {
+            $map['g.type'] = $param['type'];
+        }
+
+        $map['g.deleted_at'] = '0000-00-00 00:00:00';
+
+        $pre = C('DB_PREFIX');
+
+        $model = D('Goods')->alias('g')
+            ->join(' left join '.$pre.'invoice_info as inv on g.id = inv.goods_id ');
+
+        $field = 'g.id, g.name, g.type, g.category, g.spec, g.storage_house, g.min_inventory, g.max_inventory, g.unit, g.purchase_price, g.sale_price, g.wholesale_price, g.vip_price, g.discount_rate_1, g.discount_rate_2, g.memo, g.is_alarm, g.st_quantity, g.st_unit_cost, g.st_amount, g.created_at, ';
+
+        $field .= 'sum(inv.qty) + g.st_quantity as total_qty';
+
+        $_list = $model->where($map)->order('g.id asc')->group(' g.id ')->field($field)->select();
+
+        $goods_category = C('goods_category');
+
+        $unit_list = C('unit_list');
+
+        $goods_storage_house = C('goods_storage_house');
+
+        $paramstr = http_build_query($param);
+
+        $this->assign(compact('modal_title', '_list', 'goods_category', 'unit_list', 'goods_storage_house', 'param', 'paramstr'));
+    }
+
 }

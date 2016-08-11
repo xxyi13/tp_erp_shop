@@ -15,12 +15,12 @@ class InvoiceModel extends CommonModel
     protected $_validate = array(
         array('bill_no', 'require', '单据编号不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
 //        array('bus_id', 'require', '供应商编号不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
-        array('total_amount', 'require', '总金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
-        array('amount', 'require', '折扣后的金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
-        array('rp_amount', 'require', '本次付款金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
+//        array('total_amount', 'require', '总金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
+//        array('amount', 'require', '折扣后的金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
+//        array('rp_amount', 'require', '本次付款金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('acc_id', 'require', '结算账户不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('total_qty', 'require', '总的数量不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
-        array('pur_sale_id', 'require', '购货/销售人员不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
+//        array('pur_sale_id', 'require', '购货/销售人员不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('bill_type', 'require', '单据类型不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('bill_date', 'require', '单据日期不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_INSERT),
     );

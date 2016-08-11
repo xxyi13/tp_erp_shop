@@ -122,6 +122,44 @@
                     </ul>
                 </li>
 
+                <li>
+                    <a href="javascript:void(0)"><i class="fa fa-envelope"></i> <span class="nav-label">仓库 </span><span class="fa arrow"></span>
+                        <!--<span class="label label-warning pull-right">16</span>-->
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="J_menuItem" href="{:U('Admin/InvStorage/inventory')}">盘点</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvStorage/addQtrk', array('trans_type'=>'31'))}">其他入库单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvStorage/addQtck', array('trans_type'=>'32'))}">其他出库单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvStorage/addCbtz', array('trans_type'=>'33'))}">成本调整单</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0)"><i class="fa fa-envelope"></i> <span class="nav-label">资金 </span><span class="fa arrow"></span>
+                        <!--<span class="label label-warning pull-right">16</span>-->
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="J_menuItem" href="{:U('Admin/InvSale/add', array('trans_type'=>'41'))}">收款单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvSale/add', array('trans_type'=>'42'))}">付款单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvSale/add', array('trans_type'=>'43'))}">其他收入单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvSale/add', array('trans_type'=>'44'))}">其他支出单</a>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
         </div>
     </nav>

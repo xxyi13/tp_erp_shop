@@ -38,7 +38,7 @@ class GoodsModel extends CommonModel
         $list = $this->where($map)->field('id, name, spec, unit, st_quantity')->select();
 
         foreach ($list as $key=>&$value) {
-            $value['st_quantity'] += D('InvoiceInfo')->where(['goods_id'=>$value['id']])->sum('qty');
+            $value['total_qty'] = $value['st_quantity'] + D('InvoiceInfo')->where(['goods_id'=>$value['id']])->sum('qty');
         }
 
         return $list;

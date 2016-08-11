@@ -75,4 +75,10 @@ class InvoiceInfoModel extends CommonModel
     }
 
 
+    public function getGoodsTotalQtyById($goods_id)
+    {
+        return $this->where(['goods_id'=>$goods_id, 'deleted_at'=>['eq', 0]])->sum('qty');
+    }
+
+
 }

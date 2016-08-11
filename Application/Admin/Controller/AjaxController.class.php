@@ -47,7 +47,13 @@ class AjaxController extends Controller
     public function getGoods($type = '')
     {
         $list = D('Goods')->getGoodsList($type);
-        
+        $list[0] = [
+            'id' => '0',
+            'name' => '请选择商品',
+            'spec' => '规格型号',
+            'unit' => '单位',
+            'total_qty' => '剩余库存'
+        ];
         $return['message'] = "";
         $return['value'] = $list;
         $return['code'] = 200;
