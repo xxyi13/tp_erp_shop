@@ -119,7 +119,12 @@ abstract class AdminController extends Controller
     }
 
 
-    protected function getGoodsList($type='')
+    /**
+     * 获取商品列表
+     * @param string $type
+     * @param bool $return 是否需要把值返回
+     */
+    protected function getGoodsList($type='', $return = false )
     {
         $modal_title = '请选择商品';
 
@@ -167,7 +172,58 @@ abstract class AdminController extends Controller
 
         $paramstr = http_build_query($param);
 
+        if( $return ) {
+            return [
+                '_list' => $_list,
+                'goods_category' => $goods_category,
+                'unit_list' => $unit_list,
+                'goods_storage_house' => $goods_storage_house,
+                'param' => $param,
+                'paramstr' => $paramstr,
+            ];
+        }
+
         $this->assign(compact('modal_title', '_list', 'goods_category', 'unit_list', 'goods_storage_house', 'param', 'paramstr'));
+
+    }
+
+
+    /**
+     * excle导出
+     * @param  [type] $expTitle     [标题]
+     * @param  [type] $expCellName  [列名称]
+     * @param  [type] $expTableData [数据]
+     */
+    public function exportExcel($expTitle, $expCellName, $expTableData, $fileName = ''){
+        $xlsTitle = iconv("UTF-8", "GB2312//IGNORE", $expTitle);//文件名称
+        $fileName = empty($fileName) ? date('YmdHis') : $fileName;    //or $xlsTitle 文件名称可根据自己情况设定
+        $cellNum = count($expCellName);
+        $dataNum = count($expTableData);
+        vendor("PHPExcel.PHPExcel");
+        $objPHPExcel = new \PHPExcel();
+
+        $cellName = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ');
+
+        $objPHPExcel->getActiveSheet(0)->mergeCells('A1:'.$cellName[$cellNum-1].'1');//合并单元格
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $expTitle.'  Export time:'.date('Y-m-d H:i:s'));
+        for($i=0;$i<$cellNum;$i++){
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($cellName[$i].'2', $expCellName[$i][1]);
+        }
+
+        // Miscellaneous glyphs, UTF-8
+        for($i=0;$i<$dataNum;$i++){
+            for($j=0;$j<$cellNum;$j++){
+                $objPHPExcel->getActiveSheet(0)->setCellValue($cellName[$j].($i+3), $expTableData[$i][$expCellName[$j][0]]);
+            }
+        }
+
+        header('pragma:public');
+        header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.$xlsTitle.'.xls"');
+        header("Content-Disposition:attachment;filename=$fileName.xls");//attachment新窗口打印inline本窗口打印
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
     }
 
 }

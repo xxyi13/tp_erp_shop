@@ -20,7 +20,7 @@
     <script>
         $(function(){
             var testBsSuggest = $("#get_{$static}").bsSuggest({
-                url: "{:U('Admin/Ajax/getBusiness', array('type'=>2))}",
+                url: "{:U('Admin/Ajax/getBusiness', array('type'=>$type))}",
                 idField: "bus_id",
                 keyField: "name"
             }).on('onDataRequestSuccess', function (e, result) {

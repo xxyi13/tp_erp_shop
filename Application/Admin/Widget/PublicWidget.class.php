@@ -28,7 +28,7 @@ class PublicWidget extends AdminController
 
         $static = ++self::$static;
 
-        $this->assign( compact('business_name', 'bus_id', 'static', 'input_name', 'disabled') );
+        $this->assign( compact('business_name', 'bus_id', 'static', 'input_name', 'disabled', 'type') );
 
         $this->display( 'Widget/get_business' );
 

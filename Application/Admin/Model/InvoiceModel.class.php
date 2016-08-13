@@ -18,8 +18,8 @@ class InvoiceModel extends CommonModel
 //        array('total_amount', 'require', '总金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
 //        array('amount', 'require', '折扣后的金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
 //        array('rp_amount', 'require', '本次付款金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
-        array('acc_id', 'require', '结算账户不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
-        array('total_qty', 'require', '总的数量不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
+//        array('acc_id', 'require', '结算账户不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
+//        array('total_qty', 'require', '总的数量不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
 //        array('pur_sale_id', 'require', '购货/销售人员不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('bill_type', 'require', '单据类型不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('bill_date', 'require', '单据日期不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_INSERT),
@@ -27,7 +27,7 @@ class InvoiceModel extends CommonModel
 
     protected $_auto = array(
         array('uid', 'getCurrentAdminUserId', self::MODEL_BOTH , 'function'),
-        array('realname', 'getCurrentAdminUserId', self::MODEL_BOTH , 'function'),
+        array('realname', 'getAdminUserRealnameById', self::MODEL_BOTH , 'function'),
         array('bill_date', 'format_datetime', self::MODEL_BOTH , 'function'),
         array('created_at', 'datetime', self::MODEL_INSERT, 'function'),
         array('updated_at', '0000-00-00 00:00:00', self::MODEL_INSERT),
@@ -48,6 +48,14 @@ class InvoiceModel extends CommonModel
         if( !$inputs['inv'] ) {
             return $this->output(self::STATUS_ERROR, $this->getError());
         }
+
+        $inputs['inv']['bus_id'] = getValue($inputs['inv'], 'bus_id', '0');
+        $inputs['inv']['total_amount'] = getValue($inputs['inv'], 'total_amount', '0');
+        $inputs['inv']['amount'] = getValue($inputs['inv'], 'amount', '0');
+        $inputs['inv']['rp_amount'] = getValue($inputs['inv'], 'rp_amount', '0');
+        $inputs['inv']['acc_id'] = getValue($inputs['inv'], 'acc_id', '0');
+        $inputs['inv']['total_qty'] = getValue($inputs['inv'], 'total_qty', '0');
+        $inputs['inv']['pur_sale_id'] = getValue($inputs['inv'], 'pur_sale_id', '0');
 
         $this->startTrans();	//	开启事务
 
@@ -78,7 +86,7 @@ class InvoiceModel extends CommonModel
             $k = $key + 1;
 
             if( !$value ) {
-                return $this->output(self::STATUS_ERROR, '第' . $k . '条商品信息：'. $this->getError());
+                return $this->output(self::STATUS_ERROR, '第' . $k . '条商品信息：'. $invoice_info_model->getError());
             }
 
             $value['inv_info_id'] = $invoice_info_model->add($value);
@@ -88,6 +96,18 @@ class InvoiceModel extends CommonModel
 
                 return $this->output(self::STATUS_ERROR, '添加第' . $k . '条商品信息失败');
             }
+        }
+
+
+        /**
+         * 判断是否需要记录 账单
+         */
+        $record_account_trans_type = ['11', '12', '21', '22'];      //  根据trans_type判断是否需要记录账单
+        if( !in_array($inputs['inv']['trans_type'], $record_account_trans_type) ) {
+            //  不记录账单直接返回
+            $this->commit();
+
+            return $this->output(self::STATUS_SUCCESS, "操作成功");
         }
 
         /*  账户记录 */

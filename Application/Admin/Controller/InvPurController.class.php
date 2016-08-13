@@ -15,10 +15,5 @@ class InvPurController extends InvController
     protected $bill_no_prefix = 1;
 
     protected $bill_type = 'PUR';
-
-    public function index()
-    {
-
-    }
     
 }

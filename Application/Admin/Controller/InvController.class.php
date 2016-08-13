@@ -51,14 +51,26 @@ abstract class InvController extends AdminController
     {
         $inputs = I('');
 
-        $inputs['inv']['bill_type'] = $this->bill_type;
+        $inputs['inv']['bill_type'] = $this->getBillType();
 
         $inputs['inv']['__hash__'] = $inputs['__hash__'];
         
-        if( !empty( (float)$inputs['inv']['arrears']) ) {
+        if( isset($inputs['inv']['arrears']) && !empty( (float)$inputs['inv']['arrears']) ) {
             $this->error( "暂不允许欠款" );
         }
 
+        if( empty($inputs['data']) ) {
+            $this->error( "请添加商品信息" );
+        }
+
+        foreach ($inputs['data'] as $key=>$value) {
+            if($value['is_delete']) {
+                unset($inputs['data'][$key]);
+            }
+        }
+
+        $inputs['data'] = array_values($inputs['data']);
+        
         if( empty($inputs['data']) ) {
             $this->error( "请添加商品信息" );
         }
@@ -73,9 +85,23 @@ abstract class InvController extends AdminController
     /**
      * 获取单据编号
      */
-    public function getBillNo($prefix = '0')
+    protected function getBillNo($prefix = '0')
     {
         return C('bill_no_prefix')[$prefix] . date('YmdHis') . rand(0, 9);
+    }
+
+    /**
+     * 获取单据类型
+     * @return bool
+     */
+    protected function getBillType()
+    {
+        if( empty($this->bill_type) ) {
+            $bill_type = I('bill_type', '');
+            return empty($bill_type) ? I('inv')['bill_type'] : '';
+        }
+
+        return $this->bill_type;
     }
 
 

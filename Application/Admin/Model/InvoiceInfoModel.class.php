@@ -18,10 +18,10 @@ class InvoiceInfoModel extends CommonModel
         array('bus_id', 'require', '供应商编号不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('bill_type', 'require', '单据类型不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
         array('bill_date', 'require', '单据日期不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_INSERT),
-        array('goods_id', 'require', '商品编号不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
-        array('amount', 'require', '购货金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
-        array('price', 'require', '商品购货单价不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_INSERT),
-        array('qty', 'require', '购货数量不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
+//        array('goods_id', 'require', '商品编号不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
+//        array('amount', 'require', '购货金额不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
+//        array('price', 'require', '商品购货单价不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_INSERT),
+//        array('qty', 'require', '购货数量不能为空', self::MUST_VALIDATE, 'regex', self::MODEL_BOTH),
     );
 
     protected $_auto = array(
@@ -65,7 +65,7 @@ class InvoiceInfoModel extends CommonModel
     {
         $trans_type = I("inv")['trans_type'];
 
-        $array = ['12', '21'];
+        $array = ['12', '21', '32'];
 
         if( in_array($trans_type, $array) ) {
             return '-'.abs($qty);
