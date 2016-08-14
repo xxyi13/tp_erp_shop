@@ -12,7 +12,7 @@ namespace Admin\Controller;
 class InvPurController extends InvController
 {
     //  单据编号前缀
-    protected $bill_no_prefix = 1;
+    protected $bill_no_prefix = 11;
 
     protected $bill_type = 'PUR';
     

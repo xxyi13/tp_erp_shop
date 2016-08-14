@@ -115,7 +115,40 @@ class PublicWidget extends AdminController
         $this->assign(compact('input_name', 'category', 'disabled', 'list'));
 
         $this->display('Widget/get_goods_category');
+    }
 
+    /**
+     * 获取账户 支付方式
+     * @param string $input_name
+     * @param string $way_id
+     * @param bool $disabled
+     */
+    public function getAccountWay( $input_name = '', $way_id = '', $disabled = false )
+    {
+        if( empty($input_name) ) {
+            return false;
+        }
+
+        $list = C('account_way_id');
+
+        $this->assign(compact('input_name', 'way_id', 'disabled', 'list'));
+
+        $this->display('Widget/get_account_way');
+    }
+
+    public function getAccountCate( $input_name = '', $cate = '', $disabled = false )
+    {
+        if( empty($input_name) ) {
+            return false;
+        }
+
+        $c = substr($cate, 0, 1);
+
+        $list = C('account_cate')[$c];
+
+        $this->assign(compact('input_name', 'cate', 'disabled', 'list'));
+
+        $this->display('Widget/get_account_cate');
     }
 
 }

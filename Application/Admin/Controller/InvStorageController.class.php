@@ -23,37 +23,11 @@ class InvStorageController extends InvController
     }
 
     /**
-     * 获取单据信息
-     */
-    protected function getInvInfo()
-    {
-        $trans_type = I('trans_type', '0');
-
-        if( empty($trans_type) ) {
-            $this->error("请求地址,缺少必要参数");
-        }
-
-        //  获取采购单据号
-        $bill_no = $this->getBillNo( $this->bill_no_prefix );
-
-        $this->assign(compact('trans_type', 'bill_no'));
-
-        // 记录当前列表页的cookie
-        Cookie('__forward__',$_SERVER['REQUEST_URI']);
-    }
-
-    /**
      * 添加其他入库
      */
     public function addQtrk()
     {
-        $this->bill_no_prefix = '3';
-
         $this->getInvInfo();
-
-        $bill_type = 'OI';
-
-        $this->assign(compact('bill_type'));
         
         $this->display('qtrk');
     }
@@ -63,13 +37,7 @@ class InvStorageController extends InvController
      */
     public function addQtck()
     {
-        $this->bill_no_prefix = '4';
-
         $this->getInvInfo();
-
-        $bill_type = 'OO';
-        
-        $this->assign(compact('bill_type'));
 
         $this->display('qtck');
     }
@@ -79,13 +47,7 @@ class InvStorageController extends InvController
      */
     public function addCbtz()
     {
-        $this->bill_no_prefix = '5';
-
         $this->getInvInfo();
-
-        $bill_type = 'CADJ';
-
-        $this->assign(compact('bill_type'));
 
         $this->display('cbtz');
     }

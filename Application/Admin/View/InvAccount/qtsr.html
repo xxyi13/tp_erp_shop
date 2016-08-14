@@ -1,0 +1,240 @@
+<extend name="Public:base" />
+
+<block name="body">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-title">
+                    <h5>收款单</h5>
+                </div>
+
+                <form action="{:U('save')}" method="post" class="form-horizontal ajax-form" id="commentForm" >
+                    <input type="hidden" name="inv[trans_type]" value="{$trans_type}">
+                    <input type="hidden" name="inv[bill_type]" value="{$bill_type}">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">客户：</label>
+                                    <div class="col-sm-8">
+                                        {:W('Public/getBusiness',array('input_name'=>'inv[bus_id]','type'=>'1'))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">单据日期：</label>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="input-sm form-control" name="inv[bill_date]" placeholder="单据日期" value="{:date('Y-m-d')}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">单据编号：</label>
+                                    <div class="col-sm-8">
+                                        <input type="hidden" name="inv[bill_no]" value="{$bill_no}">
+                                        <span class="input-sm form-control">{$bill_no}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="hr-line-dashed" style="margin: auto;"></div>
+
+                        <div class="table-responsive goods-table-list">
+                            <table class="table ">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>结算账户</th>
+                                    <th>收入金额</th>
+                                    <th>结算方式</th>
+                                    <th>收入类别</th>
+                                    <th>结算号</th>
+                                    <th>备注</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <volist name="trlist" id="vo">
+                                    <tr id="tr_{$vo}" data-sort="{$vo}" >
+                                        <td>{$vo}</td>
+                                        <td>
+                                            {:W('Public/getAccount',array('input_name'=>'account['.$key.'][acc_id]'))}
+                                        </td>
+
+                                        <td>
+                                            <input type="text" name="account[{$key}][amount]" value="" class="input-sm form-control set-row-amount" placeholder="收入金额">
+                                        </td>
+                                        <td>
+                                            {:W('Public/getAccountWay',array('input_name'=>'account['.$key.'][way_id]'))}
+                                        </td>
+
+                                        <td>
+                                            {:W('Public/getAccountCate',array('input_name'=>'account['.$key.'][cate]', 'cate'=>'1'))}
+                                        </td>
+
+                                        <td>
+                                            <input type="text" name="account[{$key}][settlement]" value="" class="input-sm form-control" placeholder="结算号">
+                                        </td>
+
+                                        <td>
+                                            <input type="hidden" name="account[{$key}][is_delete]" value="0" class="input-sm form-control">
+                                            <a href="javascript:void(0)" class="btn btn-warning btn-xs del-row" title="删除行">删除</a>
+                                        </td>
+                                    </tr>
+                                </volist>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td>合计</td>
+                                    <td> </td>
+                                    <td>
+                                        <input type="hidden" name="inv[total_amount]" value="0" class="input-sm form-control">
+                                        <input type="hidden" name="inv[amount]" value="0" class="input-sm form-control">
+                                        <span class="input-sm form-control">0</span>
+                                    </td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="hr-line-dashed" style="margin: auto;"></div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <textarea class="input-sm form-control" style="width: 98%; margin-left: 1%;" name="inv[memo]" placeholder="备注信息"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">制单人：</label>
+                                    <div class="col-sm-7">
+                                        <span class="input-sm form-control">{:getAdminUserRealnameById()}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group" style="position: fixed; top: 25px; right: 25px;">
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <button class="btn btn-primary" type="submit">保存单据</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="goods-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</block>
+
+<block name="style">
+
+</block>
+
+<block name="script">
+    <script>
+        $(function () {
+            /**
+             * 删除
+             */
+            $(".goods-table-list").on("click", ".del-row", function () {
+
+                $(this).prev().val(1);  //  设置该条数据为已删除
+
+                $(this).removeClass("del-row").addClass('undel-row').text("恢复");
+
+                trObj = $(this).parent().parent();
+
+                trObj.addClass('tr-goods-remove');
+                sort = trObj.attr('data-sort');
+
+                $("#tr_"+sort + " :input").attr("readonly", "readonly");
+
+                $("#tr_"+sort).addClass("divider");
+
+                MyInv.countTotalAmount();
+            });
+
+            /**
+             * 取消删除
+             */
+            $(".goods-table-list").on("click", ".undel-row", function () {
+
+                $(this).prev().val(0);  //  设置该条数据为正常
+
+                $(this).removeClass("undel-row").addClass('del-row').text("删除");
+
+                trObj = $(this).parent().parent();
+
+                trObj.removeClass('tr-goods-remove');
+                sort = trObj.attr('data-sort');
+
+                $("#tr_"+sort + " :input").attr("readonly", false);
+
+                $("#tr_"+sort).removeClass("divider");
+
+                MyInv.countTotalAmount();
+            });
+
+            /**
+             * 设置每行的金额
+             */
+            $(".goods-table-list").on("change", ".set-row-amount", function () {
+
+                MyInv.countTotalAmount();
+            });
+        });
+
+        var MyInv = new Object();
+
+        /**
+         * 设置整体金额
+         */
+        MyInv.countTotalAmount = function () {
+            total_amount = 0;
+
+            $(".goods-table-list tbody tr").each(function (i, n) {
+
+                if( $(n).hasClass("tr-goods-remove") === false ) {
+                    amount = $(n).children("td").eq(2).children("input[name='account["+i+"][amount]']").val();
+
+                    total_amount = accAdd( total_amount , amount );
+                }
+            });
+
+            //  设置table 表格中的汇总计算
+            $("input[name='inv[total_amount]']").val(total_amount);
+            $("input[name='inv[amount]']").val(total_amount);
+            $("input[name='inv[amount]']").next('span').text(total_amount);
+        };
+    </script>
+</block>

@@ -4,6 +4,7 @@
 
     <select class="form-control" name="{$input_name}">
         <volist name="account_list" id="vo">
+            <option value="{$vo['id']}">--请选择--</option>
             <eq name="vo.id" value="$account_id">
                 <option value="{$vo['id']}"  selected="selected" >{$vo['name']}</option>
             <else/>

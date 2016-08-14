@@ -40,112 +40,184 @@ class InvoiceModel extends CommonModel
         array('arrears', 'getInvoiceArrears', self::MODEL_BOTH, 'callback'),
     );
 
-    public function addInvoiceData($inputs = [])
+    //  单据自赠编号
+    public $inv_id;
+
+    /**
+     * 保存单据信息
+     * @param array $inputs
+     * @param string $model
+     */
+    public function addData($inputs = [])
     {
-        /*  单据信息 */
-        $inputs['inv'] = $this->create($inputs['inv']);
-
-        if( !$inputs['inv'] ) {
-            return $this->output(self::STATUS_ERROR, $this->getError());
+        $trans_type_data = [
+            'addInvoiceAllData' => [11, 12, 21, 22],
+            'addInvoiceInfoData' => [31, 32, 33],
+            'addAccountInfoData' => [41, 42, 43, 44],
+        ];
+        if ( in_array($inputs['inv']['trans_type'], $trans_type_data['addInvoiceInfoData']) ) {
+            return $this->addInvoiceInfoData($inputs);
+        } else if ( in_array($inputs['inv']['trans_type'], $trans_type_data['addAccountInfoData']) ) {
+            return $this->addAccountInfoData($inputs);
+        } else {
+            return $this->addInvoiceAllData($inputs);
         }
+    }
 
-        $inputs['inv']['bus_id'] = getValue($inputs['inv'], 'bus_id', '0');
-        $inputs['inv']['total_amount'] = getValue($inputs['inv'], 'total_amount', '0');
-        $inputs['inv']['amount'] = getValue($inputs['inv'], 'amount', '0');
-        $inputs['inv']['rp_amount'] = getValue($inputs['inv'], 'rp_amount', '0');
-        $inputs['inv']['acc_id'] = getValue($inputs['inv'], 'acc_id', '0');
-        $inputs['inv']['total_qty'] = getValue($inputs['inv'], 'total_qty', '0');
-        $inputs['inv']['pur_sale_id'] = getValue($inputs['inv'], 'pur_sale_id', '0');
-
+    protected function addInvoice($inputs)
+    {
         $this->startTrans();	//	开启事务
 
+        $this->inv_id = $this->add($inputs);
 
-        /*  商品信息 */
-
-        $invoice_info_model = D('InvoiceInfo');
-
-        $inv_id = $this->add($inputs['inv']);
-
-        if( $inv_id === false ) {
+        if( !$this->inv_id ) {
             $this->rollback();
 
             return $this->output(self::STATUS_ERROR, '添加单据信息失败');
         }
 
-        foreach ($inputs['data'] as $key=>&$value) {
-            $value['inv_id'] = $inv_id;
-            $value['bus_id'] = $inputs['inv']['bus_id'];
-            $value['bill_no'] = $inputs['inv']['bill_no'];
-            $value['bill_type'] = $inputs['inv']['bill_type'];
-            $value['bill_date'] = $inputs['inv']['bill_date'];
-            $value['trans_type'] = $inputs['inv']['trans_type'];
-            $value['pur_sale_id'] = $inputs['inv']['pur_sale_id'];
+        return true;
+    }
 
-            $value = $invoice_info_model->create($value);
-
-            $k = $key + 1;
-
-            if( !$value ) {
-                return $this->output(self::STATUS_ERROR, '第' . $k . '条商品信息：'. $invoice_info_model->getError());
-            }
-
-            $value['inv_info_id'] = $invoice_info_model->add($value);
-
-            if( $value['inv_info_id'] === false ) {
-                $this->rollback();
-
-                return $this->output(self::STATUS_ERROR, '添加第' . $k . '条商品信息失败');
-            }
+    protected function addInvoiceInfo($inputs)
+    {
+        foreach ($inputs as $key=>&$value) {
+            $value['inv_id'] = $this->inv_id;
         }
 
+        $invoice_info_model = D('InvoiceInfo');
 
-        /**
-         * 判断是否需要记录 账单
-         */
-        $record_account_trans_type = ['11', '12', '21', '22'];      //  根据trans_type判断是否需要记录账单
-        if( !in_array($inputs['inv']['trans_type'], $record_account_trans_type) ) {
-            //  不记录账单直接返回
-            $this->commit();
+        if( !$invoice_info_model->addAll($inputs) ) {
+            $this->rollback();
 
-            return $this->output(self::STATUS_SUCCESS, "操作成功");
+            return $this->output(self::STATUS_ERROR, '添加单据商品详情信息失败');
         }
 
-        /*  账户记录 */
+        return true;
+    }
+
+    protected function addAccountInfo($inputs)
+    {
+        if( empty($inputs) || !isset($inputs[0]) || empty($inputs[0]) ) {
+            $this->rollback();
+
+            $this->output(self::STATUS_ERROR, '账户金额详情信息不能为空');
+        }
+
+        foreach ($inputs as $key=>&$value) {
+            $value['inv_id'] = $this->inv_id;
+        }
+
         $account_info_model = D('AccountInfo');
 
-        $account_info_data = [
-            'inv_id' => $inv_id,
-            'bus_id' => $inputs['inv']['bus_id'],
-            'bill_no' => $inputs['inv']['bill_no'],
-            'bill_type' => $inputs['inv']['bill_type'],
-            'bill_date' => $inputs['inv']['bill_date'],
-            'trans_type' => $inputs['inv']['trans_type'],
-            'acc_id' => $inputs['inv']['acc_id'],
-            'payment' => $inputs['inv']['rp_amount'],
-            'way_id' => 0,
-            'memo' => '',
-        ];
-
-        $account_info_data = $account_info_model->create($account_info_data);
-
-        if( !$account_info_data ) {
+        if( !$account_info_model->addAll($inputs) ) {
             $this->rollback();
 
-            return $this->output(self::STATUS_ERROR, '添加账户记录信息失败:' . $account_info_model->getError());
+            return $this->output(self::STATUS_ERROR, '记录单据账户金额详情信息失败');
         }
 
-        $account_info_id = $account_info_model->add($account_info_data);
+        return true;
+    }
+    /**
+     * 记录单据 购货 销货 涉及 账单 商品
+     * @param array $inputs
+     * @return array
+     */
+    public function addInvoiceAllData($inputs = [])
+    {
+        if( empty($inputs['data']) || !isset($inputs['data'][0]) ) {
+            $this->output(self::STATUS_ERROR, '商品详情信息不能为空');
+        }
 
-        if( $account_info_id === false ) {
-            $this->rollback();
+        $re = $this->addInvoice($inputs['inv']);
+        if( !$re ) {
+            return $re;
+        }
 
-            return $this->output(self::STATUS_ERROR, '添加账户记录信息失败');
+        /* 记录单据商品信息*/
+        $re = $this->addInvoiceInfo($inputs['data']);
+        if( !$re ) {
+            return $re;
+        }
+
+        /* 记录单据账户金额详情信息*/
+        if( !isset($inputs['account']) || empty($inputs['account']) || empty($inputs['account'][0]) ) {
+            $inputs['account'][0] = [
+                'inv_id' => $this->inv_id,
+                'bus_id' => $inputs['inv']['bus_id'],
+                'bill_no' => $inputs['inv']['bill_no'],
+                'bill_type' => $inputs['inv']['bill_type'],
+                'bill_date' => $inputs['inv']['bill_date'],
+                'trans_type' => $inputs['inv']['trans_type'],
+                'acc_id' => $inputs['inv']['acc_id'],
+                'payment' => $inputs['inv']['rp_amount'],
+                'way_id' => 0,
+                'memo' => '',
+                'settlement' => isset($inputs['account'][0]['settlement']) ? $inputs['account'][0]['settlement'] : 0
+            ];
+        }
+
+        $re = $this->addAccountInfo($inputs['account']);
+
+        if( !$re ) {
+            return $re;
         }
 
         $this->commit();
 
-        return $this->output(self::STATUS_SUCCESS, "操作成功");
+        return $this->output(self::STATUS_SUCCESS, "单据添加成功");
     }
+
+    /**
+     * 记录仓库库存信息 不记录账户详情
+     */
+    public function addInvoiceInfoData($inputs = [])
+    {
+        if( empty($inputs['data']) || !isset($inputs['data'][0]) ) {
+            $this->output(self::STATUS_ERROR, '商品详情信息不能为空');
+        }
+
+        $re = $this->addInvoice($inputs['inv']);
+        if( !$re ) {
+            return $re;
+        }
+
+        /* 记录单据商品信息*/
+        $re = $this->addInvoiceInfo($inputs['data']);
+        if( !$re ) {
+            return $re;
+        }
+
+        $this->commit();
+
+        return $this->output(self::STATUS_SUCCESS, "单据添加成功");
+    }
+
+    /**
+     * 添加账单金额信息 不记录商品详情
+     */
+    public function addAccountInfoData($inputs = [])
+    {
+        if( empty($inputs['data']) || !isset($inputs['data'][0]) ) {
+            $this->output(self::STATUS_ERROR, '商品详情信息不能为空');
+        }
+
+        $re = $this->addInvoice($inputs['inv']);
+        if( !$re ) {
+            return $re;
+        }
+
+        /* 记录单据账户金额详情信息*/
+        $re = $this->addAccountInfo($inputs['account']);
+        if( !$re ) {
+            return $re;
+        }
+
+        $this->commit();
+
+        return $this->output(self::STATUS_SUCCESS, "单据添加成功");
+    }
+
 
     /**
      * 根据 $trans_type 判断该单据的 总金额 折扣后金额 本次付款金额 的正负
@@ -186,6 +258,5 @@ class InvoiceModel extends CommonModel
 
         return abs($amount);
     }
-
 
 }

@@ -27,6 +27,16 @@ abstract class InvController extends AdminController
      */
     public function add()
     {
+        $this->getInvInfo();
+
+        $this->display();
+    }
+
+    /**
+     * 获取单据信息
+     */
+    protected function getInvInfo()
+    {
         $trans_type = I('trans_type', '0');
 
         if( empty($trans_type) ) {
@@ -34,14 +44,14 @@ abstract class InvController extends AdminController
         }
 
         //  获取采购单据号
-        $bill_no = $this->getBillNo( $this->bill_no_prefix );
+        $bill_no = $this->getBillNo( $trans_type );
 
-        $this->assign(compact('trans_type', 'bill_no'));
+        $bill_type = C('bill_type')[$trans_type];
+
+        $this->assign(compact('trans_type', 'bill_no', 'bill_type'));
 
         // 记录当前列表页的cookie
         Cookie('__forward__',$_SERVER['REQUEST_URI']);
-
-        $this->display();
     }
 
     /**
@@ -59,23 +69,82 @@ abstract class InvController extends AdminController
             $this->error( "暂不允许欠款" );
         }
 
-        if( empty($inputs['data']) ) {
-            $this->error( "请添加商品信息" );
+        $invoice_model = D('Invoice');
+        $inputs['inv'] = $invoice_model->create($inputs['inv']);
+
+        if( !$inputs['inv'] ) {
+            $this->error($invoice_model->getError(), '', self::AJAX_IS_OPEN);
         }
 
-        foreach ($inputs['data'] as $key=>$value) {
-            if($value['is_delete']) {
-                unset($inputs['data'][$key]);
+        $inputs['inv']['bus_id'] = getValue($inputs['inv'], 'bus_id', '0');
+        $inputs['inv']['total_amount'] = getValue($inputs['inv'], 'total_amount', '0');
+        $inputs['inv']['amount'] = getValue($inputs['inv'], 'amount', '0');
+        $inputs['inv']['rp_amount'] = getValue($inputs['inv'], 'rp_amount', '0');
+        $inputs['inv']['acc_id'] = getValue($inputs['inv'], 'acc_id', '0');
+        $inputs['inv']['total_qty'] = getValue($inputs['inv'], 'total_qty', '0');
+        $inputs['inv']['pur_sale_id'] = getValue($inputs['inv'], 'pur_sale_id', '0');
+
+        /*  完善商品详情信息*/
+        $invoice_info_model = D('InvoiceInfo');
+        if( isset($inputs['data']) && !empty($inputs['data']) ) {
+            foreach ($inputs['data'] as $key=>&$value) {
+                $k = $key + 1;
+                if($value['is_delete']) {
+                    unset($inputs['data'][$key]);
+                    continue;
+                }
+                $value['bus_id'] = $inputs['inv']['bus_id'];
+                $value['bill_no'] = $inputs['inv']['bill_no'];
+                $value['bill_type'] = $inputs['inv']['bill_type'];
+                $value['bill_date'] = $inputs['inv']['bill_date'];
+                $value['trans_type'] = $inputs['inv']['trans_type'];
+                $value['pur_sale_id'] = $inputs['inv']['pur_sale_id'];
+
+                $value = $invoice_info_model->create($value);
+
+                if( !$value ) {
+                    $this->error( '第' . $k . '条商品信息有误：'. $invoice_info_model->getError(), '' , self::AJAX_IS_OPEN);
+                }
+            }
+            $inputs['data'] = array_values($inputs['data']);
+        }
+
+        /*  完善账户金额详情信息*/
+        $invoice_info_model = D('AccountInfo');
+        if( !isset($inputs['account']) || empty($inputs['account']) ) {
+            $inputs['account'][0] = [];
+        }
+
+        foreach ($inputs['account'] as $key=>&$value) {
+
+            $k = $key + 1;
+            if( $value['is_delete']  || empty($value['acc_id']) || empty($value['amount']) || empty($value['way_id']) ) {
+                unset($inputs['account'][$key]);
+                continue;
+            }
+
+            $value['bus_id'] = $inputs['inv']['bus_id'];
+            $value['bill_no'] = $inputs['inv']['bill_no'];
+            $value['bill_type'] = $inputs['inv']['bill_type'];
+            $value['bill_date'] = $inputs['inv']['bill_date'];
+            $value['trans_type'] = $inputs['inv']['trans_type'];
+            $value['acc_id'] = $inputs['inv']['acc_id'];
+            $value['payment'] = isset($value['amount']) ? $value['amount'] : $inputs['inv']['amount'];
+            $value['way_id'] = isset($value['way_id']) ? $value['way_id'] : 0;
+            $value['memo'] = isset($value['memo']) ? $value['memo'] : 0;
+            $value['settlement'] = isset($value['settlement']) ? $value['settlement'] : 0;
+            $value['cate'] = isset($value['cate']) ? $value['cate'] : 0;
+
+            $value = $invoice_info_model->create($value);
+
+            if( !$value ) {
+                $this->error( '第' . $k . '条账户信息有误：'. $invoice_info_model->getError(), '' , self::AJAX_IS_OPEN);
             }
         }
 
-        $inputs['data'] = array_values($inputs['data']);
-        
-        if( empty($inputs['data']) ) {
-            $this->error( "请添加商品信息" );
-        }
+        $inputs['account'] = array_values($inputs['account']);
 
-        if( $this->model->addInvoiceData( $inputs ) ) {
+        if( $this->model->addData( $inputs ) ) {
             $this->success($this->model->getErrorMsg(), Cookie('__forward__'), self::AJAX_IS_OPEN);
         }
 
