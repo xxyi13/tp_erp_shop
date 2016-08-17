@@ -136,6 +136,12 @@ class PublicWidget extends AdminController
         $this->display('Widget/get_account_way');
     }
 
+    /**
+     * @param string $input_name
+     * @param string $cate
+     * @param bool $disabled
+     * @return bool
+     */
     public function getAccountCate( $input_name = '', $cate = '', $disabled = false )
     {
         if( empty($input_name) ) {
@@ -149,6 +155,26 @@ class PublicWidget extends AdminController
         $this->assign(compact('input_name', 'cate', 'disabled', 'list'));
 
         $this->display('Widget/get_account_cate');
+    }
+
+
+    /**
+     * 获取单据业务类型
+     * @param string $input_name
+     * @param string $trans_type
+     * @param bool $disabled
+     */
+    public function getTransType( $input_name = '', $trans_type = '', $disabled = false )
+    {
+        if( empty($input_name) ) {
+            return false;
+        }
+
+        $list = C('trans_type');
+
+        $this->assign(compact('input_name', 'trans_type', 'disabled', 'list'));
+
+        $this->display('Widget/get_trans_type');
     }
 
 }

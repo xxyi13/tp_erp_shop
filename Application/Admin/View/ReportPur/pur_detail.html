@@ -11,12 +11,52 @@
 
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-sm-2">
-                            <a href="javascript:history.go(0)" class="btn btn-sm btn-primary"> 刷新 </a>
-                        </div>
 
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
+                            <form action="{:U('?'.$paramstr)}" method="get" class="form-horizontal" id="commentForm">
 
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <input type="date" name="start_date" value="{$param['start_date']}" class="form-control" placeholder="起始日期">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <input type="date" name="end_date" value="{$param['end_date']}" class="form-control" placeholder="结束日期">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        {:W('Public/getGoodsCategory',array('input_name'=>'category','category'=>$param['category']))}
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        {:W('Public/getTransType',array('input_name'=>'trans_type','trans_type'=>$param['trans_type']))}
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    {:W('Public/getBusiness',array('input_name'=>'bus_id','type'=>'2'))}
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <input type="text" name="bill_no" value="{$param['bill_no']}" class="form-control" placeholder="单据编号">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-sm btn-primary"> 搜索</button>
+
+                                        <a href="javascript:history.go(0)" class="btn btn-sm btn-primary"> 刷新 </a>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
 

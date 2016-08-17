@@ -11,15 +11,14 @@ namespace Admin\Controller;
 
 class ReportPurController extends ReportController
 {
-
     /**
      * 采购明细表
      */
     public function purDetail()
     {
-        list( $_list, $number, $total ) = D('InvoiceInfo')->purDetail();
+        list( $_list, $number, $total, $param, $paramstr ) = D('InvoiceInfo')->purDetail();
 
-        $this->assign(compact('_list', 'number', 'total'));
+        $this->assign(compact('_list', 'number', 'total', 'param', 'paramstr'));
 
         $this->display('pur_detail');
     }

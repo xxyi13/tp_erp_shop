@@ -83,4 +83,158 @@ abstract class CommonModel extends Model
     {
         return $this->error_msg;
     }
+
+
+    /********************************************************************************************/
+    
+    //  搜索传递参数
+    protected $param = [];
+
+    //  组装查询条件
+    protected $map = [];
+
+    /**
+     * 获取搜索传递的参数
+     * @return array
+     */
+    public function getParam()
+    {
+        return $this->param;
+    }
+
+    /**
+     * 获取组装好的查询条件
+     * @return array
+     */
+    public function getMap()
+    {
+        return $this->map;
+    }
+
+    /**
+     * 获取搜索传递的参数 并转化为 url字符串
+     */
+    public function getParamString()
+    {
+        return http_build_query($this->param);
+    }
+
+    /**
+     * 获取 param map 等全部信息
+     */
+    public function getMapParam()
+    {
+        return [
+            $this->getMap(),
+            $this->getParam(),
+            $this->getParamString()
+        ];
+    }
+
+    /**
+     * 获取单据日期的条件
+     * @param array $param
+     * @return array
+     */
+    public function setMapBillDate($db_prefix = '')
+    {
+        $this->param['start_date'] = format_datetime( I('start_date', '') );
+        $this->param['end_date'] = format_datetime( I('end_date', '') );
+
+        if( empty($this->param['start_date']) ) {
+            $this->param['start_date'] = date('Y-m-01', strtotime(date("Y-m-d")));
+        }
+
+        if( empty($this->param['end_date']) ) {
+//            date('Y-m-d', strtotime("$this->param['start_date'] +1 month -1 day"));
+            $this->param['end_date'] = date('Y-m-d', time());
+        }
+
+        if( empty($db_prefix) ) {
+            $this->map['bill_date'] = [
+                ['egt', $this->param['start_date']],
+                ['elt', $this->param['end_date']]
+            ];
+        } else {
+            $this->map[$db_prefix.'.bill_date'] = [
+                ['egt', $this->param['start_date']],
+                ['elt', $this->param['end_date']]
+            ];
+        }
+
+        return $this;
+    }
+
+    /**
+     * 设置条件：商品分类
+     * @param string $db_prefix
+     * @return $this
+     */
+    public function setMapGoodsCategory($db_prefix = '')
+    {
+        $this->param['category'] = I('category', '');
+        if( !empty($this->param['category']) ) {
+            if( empty($db_prefix) ) {
+                $this->map['category'] = $this->param['category'];
+            } else {
+                $this->map[$db_prefix.'.category'] = $this->param['category'];
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * 设置条件：业务类型
+     * @param string $db_prefix
+     * @return $this
+     */
+    public function setMapTransType($db_prefix = '')
+    {
+        $this->param['trans_type'] = I('trans_type', '');
+        if( !empty($this->param['trans_type']) ) {
+            if( empty($db_prefix) ) {
+                $this->map['trans_type'] = $this->param['trans_type'];
+            } else {
+                $this->map[$db_prefix.'.trans_type'] = $this->param['trans_type'];
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * 设置条件：商家编号
+     * @param string $db_prefix
+     * @return $this
+     */
+    public function setMapBusId($db_prefix = '')
+    {
+        $this->param['bus_id'] = I('bus_id', '');
+        if( !empty($this->param['bus_id']) ) {
+            if( empty($db_prefix) ) {
+                $this->map['bus_id'] = $this->param['bus_id'];
+            } else {
+                $this->map[$db_prefix.'.bus_id'] = $this->param['bus_id'];
+            }
+        }
+        return $this;
+    }
+
+
+    /**
+     * 设置条件：商家编号
+     * @param string $db_prefix
+     * @return $this
+     */
+    public function setMapBillNo($db_prefix = '')
+    {
+        $this->param['bill_no'] = I('bill_no', '');
+        if( !empty($this->param['bill_no']) ) {
+            if( empty($db_prefix) ) {
+                $this->map['bill_no'] = $this->param['bill_no'];
+            } else {
+                $this->map[$db_prefix.'.bus_id'] = $this->param['bill_no'];
+            }
+        }
+        return $this;
+    }
 }

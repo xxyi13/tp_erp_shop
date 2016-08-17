@@ -11,6 +11,5 @@ namespace Admin\Controller;
 
 class ReportController extends AdminController
 {
-
     
 }

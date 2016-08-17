@@ -83,8 +83,10 @@ class InvoiceInfoModel extends CommonModel
     /**
      * 获取采购明细表
      */
-    public function purDetail($map = [])
+    public function purDetail()
     {
+        list($map, $param, $paramstr) = $this->setMapBillDate('inv_info')->setMapGoodsCategory('goods')->setMapTransType('inv_info')->setMapBusId('inv_info')->setMapBillNo('inv_info')->getMapParam();
+        
         $map['inv_info.deleted_at'] = array('eq','0');
 
         $fields = 'inv_info.id, bill_date, bill_no, trans_type, bus_id, bus.name as bus_name, goods_id, goods.name as goods_name, goods.spec, goods.unit, goods.storage_house, inv_info.qty, inv_info.price, inv_info.amount';
@@ -94,6 +96,7 @@ class InvoiceInfoModel extends CommonModel
         $list = $model->where($map)->field($fields)->order('inv_info.id desc')->select();
 
         $total = ['qty'=>0, 'amount'=>0];
+
         foreach ($list as $key=>&$value) {
             $value['trans_type_name'] = getValue(C('trans_type'), $value['trans_type'], '未知');
             $value['unit_name'] = getValue(C('unit_list'), $value['unit'], '未知');
@@ -103,8 +106,8 @@ class InvoiceInfoModel extends CommonModel
             $total['qty'] += $value['qty'];
             $total['amount'] += $value['amount'];
         }
-        
-        return [$list, count($list), $total];
+
+        return [$list, count($list) + 1, $total, $param, $paramstr];
     }
 
     /**
