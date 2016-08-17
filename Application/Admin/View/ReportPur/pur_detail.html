@@ -1,0 +1,106 @@
+<extend name="Public:base" />
+
+<block name="body">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{$goods_type_name}商品管理</h5>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <a href="javascript:history.go(0)" class="btn btn-sm btn-primary"> 刷新 </a>
+                        </div>
+
+                        <div class="col-sm-10">
+
+                        </div>
+                    </div>
+
+
+                    <div class="table-responsive">
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="{$number}">
+                            <thead>
+                            <tr>
+                                <th>采购日期</th>
+                                <th>采购单据号</th>
+                                <th>业务类型</th>
+                                <th>供应商</th>
+                                <th>商品编号</th>
+                                <th>商品名称</th>
+                                <th>规格型号</th>
+                                <th>单位</th>
+                                <th>仓库</th>
+                                <th>数量</th>
+                                <th>单价</th>
+                                <th>采购金额</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <volist name="_list" id="vo">
+                                <tr>
+                                    <td>{$vo['bill_date']}</td>
+                                    <td>{$vo['bill_no']}</td>
+                                    <td>{$vo['trans_type_name']}</td>
+                                    <td>{$vo['bus_name']}</td>
+                                    <td>{$vo['goods_id']}</td>
+                                    <td>{$vo['goods_name']}</td>
+                                    <td>{$vo['spec']}</td>
+                                    <td>{$vo['unit_name']}</td>
+                                    <td>{$vo['storage_house_name']}</td>
+                                    <td>{$vo['qty']}</td>
+                                    <td>{$vo['price']}</td>
+                                    <td>{$vo['amount']}</td>
+                                </tr>
+                            </volist>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>合计</td>
+                                <td>{$total['qty']}</td>
+                                <td></td>
+                                <td>{$total['amount']}</td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="12">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block>
+
+<block name="style" >
+    <link href="__ADMIN__/css/plugins/footable/footable.core.css" rel="stylesheet">
+</block>
+
+<block name="script">
+    <script src="__ADMIN__/js/plugins/footable/footable.all.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+
+        });
+    </script>
+</block>

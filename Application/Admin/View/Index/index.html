@@ -62,36 +62,26 @@
                     <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">基础设置</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">基本资料 <span class="fa arrow"></span></a>
+                            <a href="#">商家 <span class="fa arrow"></span></a>
                             <ul class="nav nav-third-level">
                                 <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/1')}">客户管理</a>
                                 </li>
                                 <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">供应商管理</a>
                                 </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">商品 <span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
                                 <li><a class="J_menuItem" href="{:U('Admin/Goods/index/type/1')}">成品-商品管理</a>
                                 </li>
                                 <li><a class="J_menuItem" href="{:U('Admin/Goods/index/type/2')}">半成品-商品管理</a>
                                 </li>
-                                <li><a class="J_menuItem" href="{:U('Admin/Account/index')}">账户管理</a>
+                                <li><a class="J_menuItem" href="{:U('Admin/Goods/index/type/3')}">自制品-商品管理</a>
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#">编辑器 <span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li><a class="J_menuItem" href="form_editors.html">富文本编辑器</a>
-                                </li>
-                                <li><a class="J_menuItem" href="form_simditor.html">simditor</a>
-                                </li>
-                                <li><a class="J_menuItem" href="form_markdown.html">MarkDown编辑器</a>
-                                </li>
-                                <li><a class="J_menuItem" href="code_editor.html">代码编辑器</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a class="J_menuItem" href="suggest.html">搜索自动补全</a>
-                        </li>
-                        <li><a class="J_menuItem" href="layerdate.html">日期选择器layerDate</a>
+                        <li><a class="J_menuItem" href="{:U('Admin/Account/index')}">账户管理</a>
                         </li>
                     </ul>
                 </li>
@@ -157,6 +147,69 @@
 
                         <li><a class="J_menuItem" href="{:U('Admin/InvAccount/addQtzc', array('trans_type'=>'44'))}">其他支出单</a>
                         </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">报表</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#">采购报表 <span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportPur/purDetail')}">采购明细表</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportPur/purSummaryGoods')}">采购汇总表(按商品)</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportPur/purSummarySupply')}">采购汇总表(按供应商)</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">销售报表 <span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/1')}">销售明细表</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">销售汇总表(按商品)</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">销售汇总表(按供应商)</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">往来单位欠款表</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#">仓存报表 <span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/1')}">商品库存余额表</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">商品收发明细表</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">商品收发汇总表</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#">资金报表 <span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/1')}">现金银行报表</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">应付账款明细表</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">应收账款明细表</a>
+                                </li>
+
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/1')}">客户对账单</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">供应商对账单</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">其他收支明细表</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
                     </ul>
                 </li>
 

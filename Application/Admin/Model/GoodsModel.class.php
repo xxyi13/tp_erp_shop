@@ -33,7 +33,11 @@ class GoodsModel extends CommonModel
     {
         $map = [];
         if( !empty($type) ) {
-            $map['type'] = $type;
+            if($type == 1) {
+                $map['type'] = array('in', ['1','3']);
+            } else {
+                $map['type'] = $type;
+            }
         }
         $list = $this->where($map)->field('id, name, spec, unit, st_quantity')->select();
 

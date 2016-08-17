@@ -81,6 +81,33 @@ class InvoiceInfoModel extends CommonModel
     }
 
     /**
+     * 获取采购明细表
+     */
+    public function purDetail($map = [])
+    {
+        $map['inv_info.deleted_at'] = array('eq','0');
+
+        $fields = 'inv_info.id, bill_date, bill_no, trans_type, bus_id, bus.name as bus_name, goods_id, goods.name as goods_name, goods.spec, goods.unit, goods.storage_house, inv_info.qty, inv_info.price, inv_info.amount';
+
+        $model = $this->alias('inv_info')->join(' left join goods on inv_info.goods_id = goods.id ')->join(' left join business as bus on bus.id = inv_info.bus_id ');
+
+        $list = $model->where($map)->field($fields)->order('inv_info.id desc')->select();
+
+        $total = ['qty'=>0, 'amount'=>0];
+        foreach ($list as $key=>&$value) {
+            $value['trans_type_name'] = getValue(C('trans_type'), $value['trans_type'], '未知');
+            $value['unit_name'] = getValue(C('unit_list'), $value['unit'], '未知');
+            $value['storage_house_name'] = getValue(C('goods_storage_house'), $value['storage_house'], '默认仓库');
+            $value['amount'] = abs($value['amount']);
+
+            $total['qty'] += $value['qty'];
+            $total['amount'] += $value['amount'];
+        }
+        
+        return [$list, count($list), $total];
+    }
+
+    /**
      * 记录单据 购货 销货 涉及 账单 商品
      * @param array $inputs
      * @return array
