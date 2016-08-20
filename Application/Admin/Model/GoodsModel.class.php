@@ -48,17 +48,14 @@ class GoodsModel extends CommonModel
         return $list;
     }
 
-
     /**
-     * 采购汇总表(按商品)
+     * 按商品查询 明细表
+     * @param string $bill_type
+     * @return array
      */
-    public function purSummaryGoods()
+    public function getSummaryGoods($bill_type = '')
     {
-        list($map, $param, $paramstr) = $this->setMapBillDate('inv_info')->setMapGoodsCategory('goods')->setMapBusId('inv_info')->getMapParam();
-
-        $map['goods.deleted_at'] = array('eq','0');
-
-        $map['inv_info.bill_type'] = 'PUR';
+        list($map, $param, $paramstr) = $this->setMapDeleted('goods')->setMapDeleted('inv_info')->setMapBillType('inv_info', $bill_type)->setMapBillDate('inv_info')->setMapGoodsCategory('goods')->setMapBusId('inv_info')->getMapParam();
 
         $fields = 'goods.id as goods_id, goods.name as goods_name, goods.spec, goods.unit, goods.storage_house, inv_info.price, sum(inv_info.qty) as qty, sum(inv_info.amount) as amount';
 
@@ -69,15 +66,32 @@ class GoodsModel extends CommonModel
         $total = ['qty'=>0, 'amount'=>0];
 
         foreach ($list as $key=>&$value) {
+            $value['unit_name'] = getValue(C('unit_list'), $value['unit'], '未知');
             $value['storage_house_name'] = getValue(C('goods_storage_house'), $value['storage_house'], '默认仓库');
             $value['amount'] = abs($value['amount']);
+            $value['qty'] = abs($value['qty']);
 
             $total['qty'] += $value['qty'];
             $total['amount'] += $value['amount'];
         }
 
         return [$list, count($list) + 1, $total, $param, $paramstr];
+    }
 
+    /**
+     * 采购汇总表(按商品)
+     */
+    public function purSummaryGoods()
+    {
+        return $this->getSummaryGoods('11');
+    }
+
+    /**
+     * 销售汇总表(按商品)
+     */
+    public function saleSummaryGoods()
+    {
+        return $this->getSummaryGoods('21');
     }
 
 }

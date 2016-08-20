@@ -34,12 +34,6 @@
                                 </div>
 
                                 <div class="col-sm-2">
-                                    <div class="form-group">
-                                        {:W('Public/getTransType',array('input_name'=>'trans_type','trans_type'=>$param['trans_type']))}
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-2">
                                     {:W('Public/getBusiness',array('input_name'=>'bus_id','type'=>'2'))}
                                 </div>
 
@@ -68,6 +62,7 @@
                                 <th>采购日期</th>
                                 <th>采购单据号</th>
                                 <th>业务类型</th>
+                                <th>购货人员</th>
                                 <th>供应商</th>
                                 <th>商品编号</th>
                                 <th>商品名称</th>
@@ -86,6 +81,7 @@
                                     <td>{$vo['bill_date']}</td>
                                     <td>{$vo['bill_no']}</td>
                                     <td>{$vo['trans_type_name']}</td>
+                                    <td>{$vo['pur_sale_realname']}</td>
                                     <td>{$vo['bus_name']}</td>
                                     <td>{$vo['goods_id']}</td>
                                     <td>{$vo['goods_name']}</td>
@@ -98,6 +94,7 @@
                                 </tr>
                             </volist>
                             <tr>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

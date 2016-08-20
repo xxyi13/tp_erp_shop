@@ -12,6 +12,18 @@ namespace Admin\Controller;
 class ReportPurController extends ReportController
 {
     /**
+     * 购货单据列表
+     */
+    public function purIndex()
+    {
+        list( $_list, $number, $total, $param, $paramstr ) = D('Invoice')->getList('11');
+
+        $this->assign(compact('_list', 'number', 'total', 'param', 'paramstr'));
+
+        $this->display('pur_index');
+    }
+    
+    /**
      * 采购明细表
      */
     public function purDetail()

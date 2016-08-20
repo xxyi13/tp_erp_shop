@@ -6,7 +6,7 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>采购汇总表(按供应商)</h5>
+                    <h5>销售汇总表(按客户)</h5>
                 </div>
 
                 <div class="ibox-content">
@@ -27,7 +27,7 @@
                                 </div>
 
                                 <div class="col-sm-2">
-                                    {:W('Public/getBusiness',array('input_name'=>'bus_id','type'=>'2'))}
+                                    {:W('Public/getBusiness',array('input_name'=>'bus_id','type'=>'1'))}
                                 </div>
 
                                 <div class="col-sm-2">
@@ -46,10 +46,10 @@
                         <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="{$number}">
                             <thead>
                             <tr>
-                                <th>供应商编号</th>
-                                <th>供应商名称</th>
+                                <th>客户编号</th>
+                                <th>客户名称</th>
                                 <!--<th>数量</th>-->
-                                <th>采购金额</th>
+                                <th>销售收入</th>
                             </tr>
                             </thead>
                             <tbody>

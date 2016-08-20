@@ -15,4 +15,14 @@ class PurSaleUserModel extends CommonModel
     {
         return $this->where(['deleted_at'=>['eq', 0]])->field($field)->select();
     }
+
+    public function getPurSaleUserById($id, $field = '')
+    {
+        if(empty($field)) {
+            return $this->field(true)->find($id);
+        }
+
+        return $this->where(['id'=>$id])->getField($field);
+    }
+
 }

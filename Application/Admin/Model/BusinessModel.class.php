@@ -53,16 +53,10 @@ class BusinessModel extends CommonModel
         return $this->where(['id'=>$id])->getField($field);
     }
 
-    /**
-     * 采购汇总表(按供应商)
-     */
-    public function purSummarySupply()
+
+    public function getSummarySupply($bill_type = '')
     {
-        list($map, $param, $paramstr) = $this->setMapBillDate('inv_info')->setMapBusId('inv_info')->getMapParam();
-
-        $map['bus.deleted_at'] = array('eq','0');
-
-        $map['inv_info.bill_type'] = 'PUR';
+        list($map, $param, $paramstr) = $this->setMapDeleted('bus')->setMapDeleted('inv_info')->setMapBillType('inv_info', $bill_type)->setMapBillDate('inv_info')->setMapBusId('inv_info')->getMapParam();
 
         $fields = 'bus.id as bus_id, bus.name as bus_name, inv_info.price, sum(inv_info.qty) as qty, sum(inv_info.amount) as amount';
 
@@ -73,6 +67,7 @@ class BusinessModel extends CommonModel
         $total = ['qty'=>0, 'amount'=>0];
 
         foreach ($list as $key=>&$value) {
+            $value['unit_name'] = getValue(C('unit_list'), $value['unit'], '未知');
             $value['storage_house_name'] = getValue(C('goods_storage_house'), $value['storage_house'], '默认仓库');
             $value['amount'] = abs($value['amount']);
 
@@ -81,5 +76,21 @@ class BusinessModel extends CommonModel
         }
 
         return [$list, count($list) + 1, $total, $param, $paramstr];
+    }
+
+    /**
+     * 采购汇总表(按供应商)
+     */
+    public function purSummarySupply()
+    {
+        return $this->getSummarySupply('11');
+    }
+
+    /**
+     * 销售汇总表(按客户)
+     */
+    public function saleSummaryCustomer()
+    {
+        return $this->getSummarySupply('21');
     }
 }

@@ -259,4 +259,33 @@ class InvoiceModel extends CommonModel
         return abs($amount);
     }
 
+
+    /**
+     * 获取单据列表
+     */
+    public function getList($bill_type = '')
+    {
+        list($map, $param, $paramstr) = $this->setMapDeleted('inv')->setMapBillType('inv', $bill_type)->setMapBillDate('inv')->setMapTransType('inv')->setMapBusId('inv')->setMapBillNo('inv')->getMapParam();
+
+        $fields = 'inv.*, bus.name as bus_name, acc.name as acc_name, user.realname as pur_sale_realname';
+
+        $list = $this->alias('inv')->join(' left join '.C('DB_PREFIX').'business as bus on bus.id = inv.bus_id ')->join(' left join '.C('DB_PREFIX').'account as acc on acc.id = inv.acc_id ')->join(' left join '.C('DB_PREFIX').'pur_sale_user as user on user.id = inv.pur_sale_id ')->where($map)->order('inv.id asc')->field($fields)->select();
+
+        $total = ['qty'=>0, 'amount'=>0, 'rp_amount'=>0, 'arrears'=>0];
+
+        foreach ($list as $key=>&$value) {
+            $value['trans_type_name'] = getValue(C('trans_type'), $value['trans_type'], '未知');
+            $value['total_amount'] = abs($value['total_amount']);
+            $value['amount'] = abs($value['amount']);
+            $value['rp_amount'] = abs($value['rp_amount']);
+            $value['arrears'] = abs($value['arrears']);
+
+            $total['amount'] += $value['amount'];       //  折扣后总金额
+            $total['rp_amount'] += $value['rp_amount']; //  付款总金额
+            $total['arrears'] += $value['arrears'];     //  欠款总额
+        }
+
+        return [$list, count($list) + 1, $total, $param, $paramstr];
+    }
+
 }

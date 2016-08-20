@@ -132,6 +132,40 @@ abstract class CommonModel extends Model
     }
 
     /**
+     * 设置 单据类型
+     * @param string $db_prefix
+     * @param $key
+     * @return $this
+     */
+    public function setMapBillType($db_prefix = '', $key)
+    {
+        if( empty($db_prefix) ) {
+            $this->map['bill_type'] = C('bill_type')[$key];
+        } else {
+            $this->map[$db_prefix.'.bill_type'] = C('bill_type')[$key];
+        }
+
+        return $this;
+    }
+
+    /**
+     * 设置 是否删除
+     * @param string $db_prefix
+     * @param string $val
+     * @return $this
+     */
+    public function setMapDeleted($db_prefix = '', $val = '0')
+    {
+        if( empty($db_prefix) ) {
+            $this->map['deleted_at'] = ['eq', $val];
+        } else {
+            $this->map[$db_prefix.'.deleted_at'] = ['eq', $val];
+        }
+
+        return $this;
+    }
+
+    /**
      * 获取单据日期的条件
      * @param array $param
      * @return array
@@ -232,7 +266,7 @@ abstract class CommonModel extends Model
             if( empty($db_prefix) ) {
                 $this->map['bill_no'] = $this->param['bill_no'];
             } else {
-                $this->map[$db_prefix.'.bus_id'] = $this->param['bill_no'];
+                $this->map[$db_prefix.'.bill_no'] = $this->param['bill_no'];
             }
         }
         return $this;

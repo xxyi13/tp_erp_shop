@@ -81,17 +81,14 @@ class InvoiceInfoModel extends CommonModel
     }
 
     /**
-     * 获取采购明细表
+     * 获取明细表
+     * @return array
      */
-    public function purDetail()
+    protected function getReportDetail($bill_type = '')
     {
-        list($map, $param, $paramstr) = $this->setMapBillDate('inv_info')->setMapGoodsCategory('goods')->setMapTransType('inv_info')->setMapBusId('inv_info')->setMapBillNo('inv_info')->getMapParam();
-        
-        $map['inv_info.deleted_at'] = array('eq','0');
+        list($map, $param, $paramstr) = $this->setMapDeleted('inv_info')->setMapDeleted('goods')->setMapDeleted('bus')->setMapBillType('inv_info', $bill_type)->setMapBillDate('inv_info')->setMapGoodsCategory('goods')->setMapTransType('inv_info')->setMapBusId('inv_info')->setMapBillNo('inv_info')->getMapParam();
 
-        $map['inv_info.bill_type'] = 'PUR';
-
-        $fields = 'inv_info.id, bill_date, bill_no, trans_type, bus_id, bus.name as bus_name, goods_id, goods.name as goods_name, goods.spec, goods.unit, goods.storage_house, inv_info.qty, inv_info.price, inv_info.amount';
+        $fields = 'inv_info.id, bill_date, bill_no, trans_type, pur_sale_id, bus_id, bus.name as bus_name, goods_id, goods.name as goods_name, goods.spec, goods.unit, goods.storage_house, inv_info.qty, inv_info.price, inv_info.amount';
 
         $model = $this->alias('inv_info')->join(' left join goods on inv_info.goods_id = goods.id ')->join(' left join business as bus on bus.id = inv_info.bus_id ');
 
@@ -103,13 +100,31 @@ class InvoiceInfoModel extends CommonModel
             $value['trans_type_name'] = getValue(C('trans_type'), $value['trans_type'], '未知');
             $value['unit_name'] = getValue(C('unit_list'), $value['unit'], '未知');
             $value['storage_house_name'] = getValue(C('goods_storage_house'), $value['storage_house'], '默认仓库');
+            $value['pur_sale_realname'] = D('PurSaleUser')->getPurSaleUserById($value['pur_sale_id'], 'realname');
             $value['amount'] = abs($value['amount']);
+            $value['qty'] = abs($value['qty']);
 
             $total['qty'] += $value['qty'];
             $total['amount'] += $value['amount'];
         }
 
         return [$list, count($list) + 1, $total, $param, $paramstr];
+    }
+
+    /**
+     * 获取采购明细表
+     */
+    public function purDetail()
+    {
+        return $this->getReportDetail('11');
+    }
+
+    /**
+     * 销售明细表
+     */
+    public function saleDetail()
+    {
+        return $this->getReportDetail('21');
     }
 
     /**
