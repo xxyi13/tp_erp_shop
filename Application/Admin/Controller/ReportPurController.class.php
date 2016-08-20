@@ -29,7 +29,11 @@ class ReportPurController extends ReportController
      */
     public function purSummaryGoods()
     {
+        list( $_list, $number, $total, $param, $paramstr ) = D('Goods')->purSummaryGoods();
 
+        $this->assign(compact('_list', 'number', 'total', 'param', 'paramstr'));
+
+        $this->display('pur_summary_goods');
     }
 
     /**
@@ -37,6 +41,10 @@ class ReportPurController extends ReportController
      */
     public function purSummarySupply()
     {
+        list( $_list, $number, $total, $param, $paramstr ) = D('Business')->purSummarySupply();
 
+        $this->assign(compact('_list', 'number', 'total', 'param', 'paramstr'));
+
+        $this->display('pur_summary_supply');
     }
 }

@@ -52,4 +52,34 @@ class BusinessModel extends CommonModel
 
         return $this->where(['id'=>$id])->getField($field);
     }
+
+    /**
+     * 采购汇总表(按供应商)
+     */
+    public function purSummarySupply()
+    {
+        list($map, $param, $paramstr) = $this->setMapBillDate('inv_info')->setMapBusId('inv_info')->getMapParam();
+
+        $map['bus.deleted_at'] = array('eq','0');
+
+        $map['inv_info.bill_type'] = 'PUR';
+
+        $fields = 'bus.id as bus_id, bus.name as bus_name, inv_info.price, sum(inv_info.qty) as qty, sum(inv_info.amount) as amount';
+
+        $model = $this->alias('bus')->join(' left join '.C('DB_PREFIX').'invoice_info as inv_info on inv_info.bus_id = bus.id ');
+
+        $list = $model->where($map)->field($fields)->order('bus.id asc')->group('bus.id')->select();
+
+        $total = ['qty'=>0, 'amount'=>0];
+
+        foreach ($list as $key=>&$value) {
+            $value['storage_house_name'] = getValue(C('goods_storage_house'), $value['storage_house'], '默认仓库');
+            $value['amount'] = abs($value['amount']);
+
+            $total['qty'] += $value['qty'];
+            $total['amount'] += $value['amount'];
+        }
+
+        return [$list, count($list) + 1, $total, $param, $paramstr];
+    }
 }

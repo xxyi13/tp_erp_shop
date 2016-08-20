@@ -6,12 +6,11 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>{$goods_type_name}采购明细表</h5>
+                    <h5>采购汇总表(按商品)</h5>
                 </div>
 
                 <div class="ibox-content">
                     <div class="row">
-
                         <div class="col-sm-12">
                             <form action="{:U('?'.$paramstr)}" method="get" class="form-horizontal" id="commentForm">
 
@@ -34,19 +33,7 @@
                                 </div>
 
                                 <div class="col-sm-2">
-                                    <div class="form-group">
-                                        {:W('Public/getTransType',array('input_name'=>'trans_type','trans_type'=>$param['trans_type']))}
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-2">
                                     {:W('Public/getBusiness',array('input_name'=>'bus_id','type'=>'2'))}
-                                </div>
-
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <input type="text" name="bill_no" value="{$param['bill_no']}" class="form-control" placeholder="单据编号">
-                                    </div>
                                 </div>
 
                                 <div class="col-sm-2">
@@ -65,10 +52,6 @@
                         <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="{$number}">
                             <thead>
                             <tr>
-                                <th>采购日期</th>
-                                <th>采购单据号</th>
-                                <th>业务类型</th>
-                                <th>供应商</th>
                                 <th>商品编号</th>
                                 <th>商品名称</th>
                                 <th>规格型号</th>
@@ -83,10 +66,6 @@
 
                             <volist name="_list" id="vo">
                                 <tr>
-                                    <td>{$vo['bill_date']}</td>
-                                    <td>{$vo['bill_no']}</td>
-                                    <td>{$vo['trans_type_name']}</td>
-                                    <td>{$vo['bus_name']}</td>
                                     <td>{$vo['goods_id']}</td>
                                     <td>{$vo['goods_name']}</td>
                                     <td>{$vo['spec']}</td>
@@ -98,10 +77,6 @@
                                 </tr>
                             </volist>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

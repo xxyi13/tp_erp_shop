@@ -89,6 +89,8 @@ class InvoiceInfoModel extends CommonModel
         
         $map['inv_info.deleted_at'] = array('eq','0');
 
+        $map['inv_info.bill_type'] = 'PUR';
+
         $fields = 'inv_info.id, bill_date, bill_no, trans_type, bus_id, bus.name as bus_name, goods_id, goods.name as goods_name, goods.spec, goods.unit, goods.storage_house, inv_info.qty, inv_info.price, inv_info.amount';
 
         $model = $this->alias('inv_info')->join(' left join goods on inv_info.goods_id = goods.id ')->join(' left join business as bus on bus.id = inv_info.bus_id ');
