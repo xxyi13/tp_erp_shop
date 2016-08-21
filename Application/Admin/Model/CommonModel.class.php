@@ -271,4 +271,22 @@ abstract class CommonModel extends Model
         }
         return $this;
     }
+
+    /**
+     * 设置条件：结算账户编号
+     * @param string $db_prefix
+     * @return $this
+     */
+    public function setMapAccId($db_prefix = '')
+    {
+        $this->param['acc_id'] = I('acc_id', '');
+        if( !empty($this->param['acc_id']) ) {
+            if( empty($db_prefix) ) {
+                $this->map['acc_id'] = $this->param['acc_id'];
+            } else {
+                $this->map[$db_prefix.'.acc_id'] = $this->param['acc_id'];
+            }
+        }
+        return $this;
+    }
 }

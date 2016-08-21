@@ -28,8 +28,11 @@ class AccountModel extends CommonModel
     /**
      * 获取
      */
-    public function getAccountList()
+    public function getAccountList($map = [])
     {
-        return $this->field('id, name, account_number, type, amount, amount_date')->where(['deleted_at'=>['eq', 0]])->select();
+        $map['deleted_at'] = ['eq', 0];
+
+        return $this->field('id, name, account_number, type, amount, amount_date')->where($map)->select();
     }
+    
 }
