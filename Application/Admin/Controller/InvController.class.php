@@ -162,7 +162,7 @@ class InvController extends AdminController
             $value['memo'] = isset($value['memo']) ? $value['memo'] : 0;
             $value['settlement'] = isset($value['settlement']) ? $value['settlement'] : 0;
             $value['cate'] = isset($value['cate']) ? $value['cate'] : 0;
-
+            
             $value = $invoice_info_model->create($value);
 
             if( !$value ) {
