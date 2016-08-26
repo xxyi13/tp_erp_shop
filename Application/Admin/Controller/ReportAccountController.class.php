@@ -23,4 +23,29 @@ class ReportAccountController extends ReportController
 
         $this->display('acc_detail');
     }
+    
+    
+    /**
+     * 应付账款明细单
+     */
+    public function accountPayDetail()
+    {
+        list( $_list, $number, $total, $param, $paramstr ) = D('Invoice')->accountPayDetail(['11', '42']);
+
+        $this->assign(compact('_list', 'number', 'total', 'param', 'paramstr'));
+
+        $this->display('acc_pay_detail');
+    }
+
+    /**
+     * 应收账款明细单
+     */
+    public function accountProceedsDetail()
+    {
+        list( $_list, $number, $total, $param, $paramstr ) = D('Invoice')->accountProceedsDetail(['21', '41']);
+
+        $this->assign(compact('_list', 'number', 'total', 'param', 'paramstr'));
+
+        $this->display('acc_proceeds_detail');
+    }
 }

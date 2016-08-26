@@ -46,7 +46,7 @@ class PublicWidget extends AdminController
         if( empty($input_name) ) {
             return false;
         }
-
+        
         $account_list = D('Account')->getAccountList();
             
         $this->assign(compact('input_name', 'account_id', 'disabled', 'account_list'));

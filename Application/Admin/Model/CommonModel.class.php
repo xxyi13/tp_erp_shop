@@ -108,7 +108,9 @@ abstract class CommonModel extends Model
      */
     public function getMap()
     {
-        return $this->map;
+        $map = $this->map;
+        $this->map = [];
+        return $map;
     }
 
     /**
@@ -137,12 +139,26 @@ abstract class CommonModel extends Model
      * @param $key
      * @return $this
      */
-    public function setMapBillType($db_prefix = '', $key)
+    public function setMapBillType($db_prefix = '', $value)
     {
+        if( is_array($value) ) {
+        
+            foreach ($value as $k=>$v) {
+                $val[] = C('bill_type')[$v];
+            }
+
+            if( empty($db_prefix) ) {
+                $this->map['bill_type'] = ['in', $val];
+            } else {
+                $this->map[$db_prefix.'.bill_type'] = ['in', $val];
+            }
+            return $this;
+        }
+
         if( empty($db_prefix) ) {
-            $this->map['bill_type'] = C('bill_type')[$key];
+            $this->map['bill_type'] = C('bill_type')[$value];
         } else {
-            $this->map[$db_prefix.'.bill_type'] = C('bill_type')[$key];
+            $this->map[$db_prefix.'.bill_type'] = C('bill_type')[$value];
         }
 
         return $this;
@@ -240,14 +256,14 @@ abstract class CommonModel extends Model
      * @param string $db_prefix
      * @return $this
      */
-    public function setMapBusId($db_prefix = '')
+    public function setMapBusId($db_prefix = '', $field = 'bus_id')
     {
         $this->param['bus_id'] = I('bus_id', '');
         if( !empty($this->param['bus_id']) ) {
             if( empty($db_prefix) ) {
-                $this->map['bus_id'] = $this->param['bus_id'];
+                $this->map[$field] = $this->param['bus_id'];
             } else {
-                $this->map[$db_prefix.'.bus_id'] = $this->param['bus_id'];
+                $this->map[$db_prefix.'.'.$field] = $this->param['bus_id'];
             }
         }
         return $this;
@@ -277,15 +293,11 @@ abstract class CommonModel extends Model
      * @param string $db_prefix
      * @return $this
      */
-    public function setMapAccId($db_prefix = '')
+    public function setMapAccId($key = 'id')
     {
         $this->param['acc_id'] = I('acc_id', '');
         if( !empty($this->param['acc_id']) ) {
-            if( empty($db_prefix) ) {
-                $this->map['acc_id'] = $this->param['acc_id'];
-            } else {
-                $this->map[$db_prefix.'.acc_id'] = $this->param['acc_id'];
-            }
+            $this->map[$key] = $this->param['acc_id'];
         }
         return $this;
     }

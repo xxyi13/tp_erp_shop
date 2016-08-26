@@ -23,6 +23,9 @@ class AjaxController extends Controller
     {
         $list = D('Business')->getBusiness($type, 'id, name, contact_name');
 
+        $list[1] = $list[0];
+        $list[0] = ['id'=>'0', 'name'=>'请选择商家', 'contact_name'=>''];
+
         $return['message'] = "";
         $return['value'] = $list;
         $return['code'] = 200;

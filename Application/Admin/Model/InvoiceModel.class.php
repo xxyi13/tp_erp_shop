@@ -288,4 +288,90 @@ class InvoiceModel extends CommonModel
         return [$list, count($list) + 1, $total, $param, $paramstr];
     }
 
+
+    /**
+     * 账款明细单
+     */
+    public function accountDetail($bill_type = [], $bus_type = '')
+    {
+        list($map1, $param, $paramstr) = $this->setMapDeleted()->setMapBusId('', 'id')->getMapParam();
+        $map1['type'] = $bus_type;
+
+        $bus_list = D('Business')->where($map1)->field(true)->order('id asc')->select();
+
+        list($map2, $param, $paramstr) = $this->setMapDeleted()->setMapBusId()->setMapBillType('', $bill_type)->setMapBillDate()->getMapParam();
+
+
+        $inv_list = $this->where($map2)->field(true)->order('id asc')->select();
+
+        $n = 0;
+        $_list = [];
+        $total['amount_1'] = 0;
+        $total['amount_2'] = 0;
+        $total['amount_3'] = 0;
+        foreach ($bus_list as $key=>$value) {
+            $_list[$n]['bus_name'] = $value['name'];
+            $_list[$n]['bill_date'] = '';
+            $_list[$n]['bill_no'] = '';
+            $_list[$n]['trans_type_name'] = $value['name'];
+            $_list[$n]['amount_1'] = $value['st_receive_money'];
+            $_list[$n]['amount_2'] = '';
+            $_list[$n]['amount_3'] = $value['st_receive_money'];
+
+            $xiaoji = [
+                'amount_1' => $_list[$n]['amount_1'],
+                'amount_2' => $_list[$n]['amount_2'],
+                'amount_3' => $_list[$n]['amount_3']
+            ];
+            foreach ($inv_list as $k=>$v) {
+                ++$n;
+                $_list[$n]['bus_name'] = $value['name'];
+                $_list[$n]['bill_date'] = $v['bill_date'];
+                $_list[$n]['bill_no'] = $v['bill_no'];
+                $_list[$n]['trans_type_name'] = getValue(C('trans_type'), $v['trans_type'], '未知');
+                $_list[$n]['amount_1'] = $v['bill_type'] == 'PUR' || $v['bill_type'] == 'SALE' ? $v['amount'] : '';
+                $_list[$n]['amount_2'] = $v['bill_type'] == 'PAYMENT' || $v['bill_type'] == 'RECEIPT' ? $v['amount'] : '';
+                $_list[$n]['amount_3'] = $_list[$n]['amount_3'] + $v['amount'];
+
+                $xiaoji['amount_1'] += $_list[$n]['amount_1'];
+                $xiaoji['amount_2'] += $_list[$n]['amount_2'];
+                $xiaoji['amount_3'] += $_list[$n]['amount_3'];
+            }
+            ++$n;
+
+            $_list[$n]['bus_name'] = '';
+            $_list[$n]['bill_date'] = '';
+            $_list[$n]['bill_no'] = '小计';
+            $_list[$n]['trans_type_name'] = '';
+            $_list[$n]['amount_1'] = $xiaoji['amount_1'];
+            $_list[$n]['amount_2'] = $xiaoji['amount_2'];
+            $_list[$n]['amount_3'] = $xiaoji['amount_3'];
+
+
+            $total['amount_1'] += $xiaoji['amount_1'];
+            $total['amount_2'] += $xiaoji['amount_2'];
+            $total['amount_3'] += $xiaoji['amount_3'];
+
+            $n++;
+        }
+
+        return [$_list, count($_list) + 1, $total, $param, $paramstr];
+    }
+
+    /**
+     * 应付账款明细单
+     */
+    public function accountPayDetail($bill_type = [])
+    {
+        return $this->accountDetail($bill_type, 2);
+    }
+
+    /**
+     * 应收账款明细单
+     */
+    public function accountProceedsDetail($bill_type = [])
+    {
+        return $this->accountDetail($bill_type, 1);
+    }
+
 }

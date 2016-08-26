@@ -100,7 +100,7 @@ class AccountInfoModel extends CommonModel
      */
     public function accountDetail()
     {
-        list($map, $param, $paramstr) = $this->alias('acc_info')->setMapBillDate('acc_info')->setMapDeleted('acc')->setMapDeleted('acc_info')->setMapAccId('acc')->getMapParam();
+        list($map, $param, $paramstr) = $this->alias('acc_info')->setMapBillDate('acc_info')->setMapDeleted('acc')->setMapDeleted('acc_info')->setMapAccId('acc.id')->getMapParam();
 
 
         $fields = 'acc.id as acc_id, acc.name as acc_name, acc.amount as st_amount, acc_info.bill_no, acc_info.bill_date , acc_info.payment , acc_info.way_id , acc_info.cate , acc_info.settlement , acc_info.trans_type, acc_info.memo, bus.name as bus_name ';
@@ -153,4 +153,5 @@ class AccountInfoModel extends CommonModel
         return [$_list, $number + 1, $total, $param, $paramstr];
 
     }
+    
 }

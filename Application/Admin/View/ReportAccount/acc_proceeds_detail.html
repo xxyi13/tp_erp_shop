@@ -29,7 +29,7 @@
 
                                 <div class="col-sm-2">
                                     <div class="form-group">
-                                        {:W('Public/getAccount',array('input_name'=>'acc_id', 'account_id'=>$param['acc_id']))}
+                                        {:W('Public/getBusiness',array('input_name'=>'bus_id','type'=>'1', 'bus_id'=>$param['bus_id']))}
                                     </div>
                                 </div>
 
@@ -49,61 +49,36 @@
                         <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="{$number}">
                             <thead>
                             <tr>
-                                <th>账户编号</th>
-                                <th>账户名称</th>
+                                <th>客户</th>
                                 <th>单据日期</th>
                                 <th>单据编号</th>
                                 <th>业务类型</th>
-                                <th>收入</th>
-                                <th>支出</th>
-                                <th>账户余额</th>
-                                <th>往来单位</th>
-                                <th>操作</th>
+                                <th>增加应收款</th>
+                                <th>支付应收款</th>
+                                <th>应付款余额</th>
                             </tr>
                             </thead>
                             <tbody>
 
                             <volist name="_list" id="vo">
-                                <volist name="_list" id="vo">
-                                    <tr>
-                                        <td>{$vo['acc_id']}</td>
-                                        <td>{$vo['acc_name']}</td>
-                                        <td> </td>
-                                        <td> </td>
-                                        <td>{$vo['trans_type_name']}</td>
-                                        <td> </td>
-                                        <td> </td>
-                                        <td>{$vo['amount']}</td>
-                                        <td> </td>
-                                        <td> </td>
-                                    </tr>
-                                    <volist name="vo._info" id="v">
-                                        <tr>
-                                        <td>{$vo['acc_id']}</td>
-                                        <td>{$vo['acc_name']}</td>
-                                        <td>{$v['bill_date']}</td>
-                                        <td>{$v['bill_no']}</td>
-                                        <td>{$v['trans_type_name']}</td>
-                                        <td>{$v['shouru']}</td>
-                                        <td>{$v['zhichu']}</td>
-                                        <td>{$v['amount']}</td>
-                                        <td>{$v['bus_name']}</td>
-                                        <td> </td>
-                                        </tr>
-                                    </volist>
-                                </volist>
+                                <tr>
+                                    <td>{$vo['bus_name']}</td>
+                                    <td>{$vo['bill_date']}</td>
+                                    <td>{$vo['bill_no']}</td>
+                                    <td>{$vo['trans_type_name']}</td>
+                                    <td>{$vo['amount_1']}</td>
+                                    <td>{$vo['amount_2']}</td>
+                                    <td>{$vo['amount_3']}</td>
+                                </tr>
                             </volist>
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td>合计</td>
-                                <td>{$total['shouru']}</td>
-                                <td>{$total['zhichu']}</td>
-                                <td>{$total['amount']}</td>
-                                <td></td>
-                                <td></td>
+                                <td>总计</td>
+                                <td>{$total['amount_1']}</td>
+                                <td>{$total['amount_2']}</td>
+                                <td>{$total['amount_3']}</td>
                             </tr>
                             </tbody>
                             <tfoot>
