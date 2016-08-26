@@ -15,9 +15,5 @@ class InvSaleController extends InvController
     protected $bill_no_prefix = 21;
 
     protected $bill_type = 'SALE';
-
-    public function index()
-    {
-        
-    }
+    
 }

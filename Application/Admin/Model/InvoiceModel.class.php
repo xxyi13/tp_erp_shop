@@ -272,7 +272,7 @@ class InvoiceModel extends CommonModel
         $list = $this->alias('inv')->join(' left join '.C('DB_PREFIX').'business as bus on bus.id = inv.bus_id ')->join(' left join '.C('DB_PREFIX').'account as acc on acc.id = inv.acc_id ')->join(' left join '.C('DB_PREFIX').'pur_sale_user as user on user.id = inv.pur_sale_id ')->where($map)->order('inv.id asc')->field($fields)->select();
 
         $total = ['qty'=>0, 'amount'=>0, 'rp_amount'=>0, 'arrears'=>0];
-
+        
         foreach ($list as $key=>&$value) {
             $value['trans_type_name'] = getValue(C('trans_type'), $value['trans_type'], '未知');
             $value['total_amount'] = abs($value['total_amount']);
