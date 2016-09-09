@@ -10,7 +10,7 @@ return array(
     'DB_DSN' => '', // 数据库连接DSN 用于PDO方式
     'DB_TYPE' => 'mysqli', // 数据库类型
     'DB_HOST' => 'localhost', // 服务器地址 192.168.1.139
-    'DB_NAME' => 'ww_erp_shop', // 数据库名
+    'DB_NAME' => 'tp_erp_shop', // 数据库名
     'DB_USER' => 'root', // 用户名 root
     'DB_PWD' => 'root', // 密码 root
     'DB_PORT' => 3306, // 端口
@@ -136,7 +136,9 @@ return array(
      */
     'goods_category' => [
         '0' => '未知商品分类',
-        '1' => '食品'
+        '1' => '面类',
+        '2' => '粉类',
+        '3' => '其他'
     ],
 
     /**
