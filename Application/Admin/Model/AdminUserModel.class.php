@@ -33,7 +33,7 @@ class AdminUserModel extends CommonModel
             return $msg;
         }
 
-        $info = $this->where( ['email'=>$email] )->field('id as uid, nickname, email, password, mobile, deleted_at')->find();
+        $info = $this->where( ['email'=>$email] )->field('id as uid, realname, email, password, mobile, deleted_at')->find();
 
         if( empty($info) || $info['deleted_at'] > 0 ) {
             $msg['info'] = '您的账户不存在';

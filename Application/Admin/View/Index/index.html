@@ -47,7 +47,7 @@
                             </li>
                             <li><a class="J_menuItem" href="contacts.html">联系我们</a>
                             </li>
-                            <li><a class="J_menuItem" href="mailbox.html">信箱</a>
+                            <li><a class="J_menuItem" href="javascript:void(0)">信箱</a>
                             </li>
                             <li class="divider"></li>
                             <li><a href="{:U('Public/logout')}">安全退出</a>
@@ -62,53 +62,163 @@
                     <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">基础设置</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">基本资料 <span class="fa arrow"></span></a>
+                            <a href="#">商家 <span class="fa arrow"></span></a>
                             <ul class="nav nav-third-level">
                                 <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/1')}">客户管理</a>
                                 </li>
-                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">运营商管理</a>
-                                </li>
-                                <li><a class="J_menuItem" href="{:U('Admin/Goods/index/type/1')}">成品-商品管理</a>
-                                </li>
-                                <li><a class="J_menuItem" href="{:U('Admin/Goods/index/type/2')}">半成品-商品管理</a>
-                                </li>
-                                <li><a class="J_menuItem" href="{:U('Admin/Account/index')}">账户管理</a>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">供应商管理</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#">编辑器 <span class="fa arrow"></span></a>
+                            <a href="#">商品 <span class="fa arrow"></span></a>
                             <ul class="nav nav-third-level">
-                                <li><a class="J_menuItem" href="form_editors.html">富文本编辑器</a>
+                                <li><a class="J_menuItem" href="{:U('Admin/Goods/index/type/1')}">成品-商品管理</a>
                                 </li>
-                                <li><a class="J_menuItem" href="form_simditor.html">simditor</a>
+                                <li><a class="J_menuItem" href="{:U('Admin/Goods/index/type/2')}">半成品-商品管理</a>
                                 </li>
-                                <li><a class="J_menuItem" href="form_markdown.html">MarkDown编辑器</a>
-                                </li>
-                                <li><a class="J_menuItem" href="code_editor.html">代码编辑器</a>
+                                <li><a class="J_menuItem" href="{:U('Admin/Goods/index/type/3')}">自制品-商品管理</a>
                                 </li>
                             </ul>
                         </li>
-                        <li><a class="J_menuItem" href="suggest.html">搜索自动补全</a>
-                        </li>
-                        <li><a class="J_menuItem" href="layerdate.html">日期选择器layerDate</a>
+                        <li><a class="J_menuItem" href="{:U('Admin/Account/index')}">账户管理</a>
                         </li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">购货 </span><span class="fa arrow"></span>
+                    <a href="javascript:void(0)"><i class="fa fa-envelope"></i> <span class="nav-label">购货 </span><span class="fa arrow"></span>
                         <!--<span class="label label-warning pull-right">16</span>-->
                     </a>
                     <ul class="nav nav-second-level">
-                        <li><a class="J_menuItem" href="">购货单</a>
+                        <li>
+                            <a class="J_menuItem" href="{:U('Admin/Inv/index', array('trans_type'=>'11-12'))}">采购单据列表</a>
+                        </li>
+                        <li><a class="J_menuItem" href="{:U('Admin/InvPur/add', array('trans_type'=>'11'))}">新建购货单</a>
                         </li>
 
-                        <li><a class="J_menuItem" href="mail_detail.html">购货退货单</a>
+                        <li><a class="J_menuItem" href="{:U('Admin/InvPur/add', array('trans_type'=>'12'))}">新建购货退货单</a>
                         </li>
                     </ul>
                 </li>
 
+                <li>
+                    <a href="javascript:void(0)"><i class="fa fa-envelope"></i> <span class="nav-label">销货 </span><span class="fa arrow"></span>
+                        <!--<span class="label label-warning pull-right">16</span>-->
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="{:U('Admin/Inv/index', array('trans_type'=>'21-22'))}">销售单据列表</a>
+                        </li>
+                        <li><a class="J_menuItem" href="{:U('Admin/InvSale/add', array('trans_type'=>'21'))}">新建销货单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvSale/add', array('trans_type'=>'22'))}">新建销货退货单</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0)"><i class="fa fa-envelope"></i> <span class="nav-label">仓库 </span><span class="fa arrow"></span>
+                        <!--<span class="label label-warning pull-right">16</span>-->
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="{:U('Admin/Inv/index', array('trans_type'=>'31-32-33'))}">仓库单据列表</a>
+                        </li>
+                        <li><a class="J_menuItem" href="{:U('Admin/InvStorage/inventory')}">盘点</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvStorage/addQtrk', array('trans_type'=>'31'))}">其他入库单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvStorage/addQtck', array('trans_type'=>'32'))}">其他出库单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvStorage/addCbtz', array('trans_type'=>'33'))}">成本调整单</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0)"><i class="fa fa-envelope"></i> <span class="nav-label">资金 </span><span class="fa arrow"></span>
+                        <!--<span class="label label-warning pull-right">16</span>-->
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="{:U('Admin/Inv/index', array('trans_type'=>'41-42-43-44'))}">资金单据列表</a>
+                        </li>
+                        <li><a class="J_menuItem" href="{:U('Admin/InvAccount/addReceipt', array('trans_type'=>'41'))}">收款单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvAccount/addPayment', array('trans_type'=>'42'))}">付款单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvAccount/addQtsr', array('trans_type'=>'43'))}">其他收入单</a>
+                        </li>
+
+                        <li><a class="J_menuItem" href="{:U('Admin/InvAccount/addQtzc', array('trans_type'=>'44'))}">其他支出单</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">报表</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#">采购报表 <span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportPur/purIndex')}">采购单列表</a></li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportPur/purDetail')}">采购单具体明细表</a></li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportPur/purSummaryGoods')}">采购汇总表(按商品)</a></li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportPur/purSummarySupply')}">采购汇总表(按供应商)</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">销售报表 <span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportSale/saleIndex')}">销货单列表</a></li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportSale/saleDetail')}">销售明细表</a></li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportSale/saleSummaryGoods')}">销售汇总表(按商品)</a></li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportSale/saleSummaryCustomer')}">销售汇总表(按客户)</a></li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportSale/contactDebt')}">往来单位欠款表</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#">仓存报表 <span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportStorage/goodsBalance')}">商品库存余额表</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportStorage/goodsFlowDetail')}">商品收发明细表</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportStorage/goodsFlowSummary')}">商品收发汇总表</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#">资金报表 <span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportAccount/accountDetail')}">资金明细报表</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportAccount/accountPayDetail')}">应付账款明细表</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/ReportAccount/accountProceedsDetail')}">应收账款明细表</a>
+                                </li>
+
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/1')}">客户对账单</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">供应商对账单</a>
+                                </li>
+                                <li><a class="J_menuItem" href="{:U('Admin/Business/index/type/2')}">其他收支明细表</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+                </li>
 
             </ul>
         </div>
@@ -161,7 +271,7 @@
                             <li class="divider"></li>
                             <li>
                                 <div class="text-center link-block">
-                                    <a class="J_menuItem" href="mailbox.html">
+                                    <a class="J_menuItem" href="javascript:void(0)">
                                         <i class="fa fa-envelope"></i> <strong> 查看所有消息</strong>
                                     </a>
                                 </div>
@@ -174,7 +284,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-alerts">
                             <li>
-                                <a href="mailbox.html">
+                                <a href="javascript:void(0)">
                                     <div>
                                         <i class="fa fa-envelope fa-fw"></i> 您有16条未读消息
                                         <span class="pull-right text-muted small">4分钟前</span>

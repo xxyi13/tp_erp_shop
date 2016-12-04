@@ -25,4 +25,14 @@ class AccountModel extends CommonModel
         array('updated_at', 'datetime', self::MODEL_UPDATE, 'function'),
     );
 
+    /**
+     * 获取
+     */
+    public function getAccountList($map = [])
+    {
+        $map['deleted_at'] = ['eq', 0];
+
+        return $this->field('id, name, account_number, type, amount, amount_date')->where($map)->select();
+    }
+    
 }

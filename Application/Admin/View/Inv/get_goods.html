@@ -1,0 +1,162 @@
+<extend name="Public:inv" />
+
+<block name="body">
+
+    <div class="row">
+        <div class="col-sm-9">
+
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <!--<table class="table table-striped">
+            <thead>
+            <tr>
+                <th></th>
+                &lt;!&ndash;<th>编号</th>&ndash;&gt;
+                <th>名称</th>
+                <th>分类</th>
+                <th>规格型号</th>
+                <th>条形码</th>
+                <th>仓库</th>
+                <th>计量单位</th>
+                <th>预警：最低库存-最高库存</th>
+                <th>价格：采购价-零售价-批发价-VIP价格</th>
+                <th>折扣1-折扣2(%)</th>
+                <th>期初:数量-单位成本-总价</th>
+                <th>剩余库存</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="_list" id="vo">
+                <tr>
+                    <td>
+                        <input type="checkbox" name="goods_id[]" value="{$vo.id}-{$vo['name']}-{$unit_list[$vo['unit']]}-{$goods_storage_house[$vo['storage_house']]}-1-{$vo['purchase_price']}-0-0-{$vo['purchase_price']}-"  >
+                    </td>
+                    &lt;!&ndash;<td>{$vo['id']}</td>&ndash;&gt;
+                    <td>{$vo['name']}</td>
+                    <td>{$goods_category[$vo['category']]}</td>
+                    <td>{$vo['spec']}</td>
+                    <td>{$vo['bar_code']}</td>
+                    <td>{$goods_storage_house[$vo['storage_house']]}</td>
+                    <td>{$unit_list[$vo['unit']]}</td>
+                    <td>{$vo['min_inventory']}-{$vo['max_inventory']}</td>
+                    <td>{$vo['purchase_price']}-{$vo['sale_price']}-{$vo['wholesale_price']}-{$vo['vip_price']}</td>
+                    <td>{$vo['discount_rate_1']}-{$vo['discount_rate_2']}</td>
+                    <td>{$vo['st_quantity']}-{$vo['st_unit_cost']}-{$vo['st_amount']}</td>
+                    <td>{$vo['total_qty']}</td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>-->
+
+        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="30">
+            <thead>
+            <tr>
+
+                <th></th>
+                <th>编号</th>
+                <th>名称</th>
+                <th>分类</th>
+                <th>规格型号</th>
+                <th data-hide="all">条形码</th>
+                <th>仓库</th>
+                <th>计量单位</th>
+                <th>剩余库存</th>
+
+                <th data-hide="all">预警：最低库存-最高库存</th>
+                <th data-hide="all">价格：采购价-零售价-批发价-VIP价格</th>
+                <th data-hide="all">折扣1-折扣2(%)</th>
+                <th data-hide="all">期初:数量-单位成本-总价</th>
+                <th data-hide="all">创建时间</th>
+                <th data-hide="all">描述</th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            <volist name="_list" id="vo">
+                <tr>
+                    <td>
+                        <input type="checkbox" name="goods_id[]" value="{$vo.id}-{$vo['name']}-{$unit_list[$vo['unit']]}-{$goods_storage_house[$vo['storage_house']]}-1-{$vo['purchase_price']}-0-0-{$vo['purchase_price']}-"  >
+                    </td>
+                    <td>{$vo['id']}</td>
+                    <td>{$vo['name']}</td>
+                    <td>{$goods_category[$vo['category']]}</td>
+                    <td>{$vo['spec']}</td>
+                    <td>{$vo['bar_code']}</td>
+                    <td>{$goods_storage_house[$vo['storage_house']]}</td>
+                    <td>{$unit_list[$vo['unit']]}</td>
+                    <td>{$vo['total_qty']|default='0'}</td>
+                    <td>{$vo['min_inventory']}-{$vo['max_inventory']}</td>
+                    <td>{$vo['purchase_price']}-{$vo['sale_price']}-{$vo['wholesale_price']}-{$vo['vip_price']}</td>
+                    <td>{$vo['discount_rate_1']}-{$vo['discount_rate_2']}</td>
+                    <td>{$vo['st_quantity']}-{$vo['st_unit_cost']}-{$vo['st_amount']}</td>
+                    <td>{$vo['created_at']}</td>
+                    <td>{$vo['memo']}</td>
+                </tr>
+            </volist>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="9">
+                    <ul class="pagination pull-right"></ul>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</block>
+
+<div class="modal-footer">
+    <block name="footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="modal-add-goods">选择并添加</button>
+    </block>
+</div>
+
+
+<block name="style" >
+    <link href="__ADMIN__/css/plugins/footable/footable.core.css" rel="stylesheet">
+</block>
+
+<block name="script">
+    <script src="__ADMIN__/js/plugins/footable/footable.all.min.js"></script>
+
+    <script>
+        $(function () {
+            $("#modal-add-goods").click(function () {
+                $("input[name='goods_id[]']").each(function (i, j) {
+                    if( $(this).is(':checked') ) {
+                        data = new Array();
+
+                        value = $(this).val();
+
+                        data = value.split('-');
+
+                        MyInv.addRow(data);
+
+                        $(this).attr("checked", false);
+                    }
+                });
+                //  隐藏modal
+                $('#goods-modal').modal('hide');
+
+                //  计算金额
+                MyInv.countTotalAmount();
+
+                //  计算付款欠款
+                MyInv.countRpAmount();
+            });
+        });
+
+        $(document).ready(function() {
+
+            $('.footable').footable();
+
+        });
+    </script>
+
+
+</block>

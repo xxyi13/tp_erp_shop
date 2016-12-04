@@ -1,0 +1,140 @@
+<extend name="Public:base" />
+
+<block name="body">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{$goods_type_name}采购明细表</h5>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            <form action="{:U('?'.$paramstr)}" method="get" class="form-horizontal" id="commentForm">
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <input type="date" name="start_date" value="{$param['start_date']}" class="form-control" placeholder="起始日期">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <input type="date" name="end_date" value="{$param['end_date']}" class="form-control" placeholder="结束日期">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        {:W('Public/getAccount',array('input_name'=>'acc_id', 'account_id'=>$param['acc_id']))}
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-sm btn-primary"> 搜索</button>
+
+                                        <a href="javascript:history.go(0)" class="btn btn-sm btn-primary"> 刷新 </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div class="table-responsive">
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="{$number}">
+                            <thead>
+                            <tr>
+                                <th>账户编号</th>
+                                <th>账户名称</th>
+                                <th>单据日期</th>
+                                <th>单据编号</th>
+                                <th>业务类型</th>
+                                <th>收入</th>
+                                <th>支出</th>
+                                <th>账户余额</th>
+                                <th>往来单位</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <volist name="_list" id="vo">
+                                <volist name="_list" id="vo">
+                                    <tr>
+                                        <td>{$vo['acc_id']}</td>
+                                        <td>{$vo['acc_name']}</td>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td>{$vo['trans_type_name']}</td>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td>{$vo['amount']}</td>
+                                        <td> </td>
+                                        <td> </td>
+                                    </tr>
+                                    <volist name="vo._info" id="v">
+                                        <tr>
+                                        <td>{$vo['acc_id']}</td>
+                                        <td>{$vo['acc_name']}</td>
+                                        <td>{$v['bill_date']}</td>
+                                        <td>{$v['bill_no']}</td>
+                                        <td>{$v['trans_type_name']}</td>
+                                        <td>{$v['shouru']}</td>
+                                        <td>{$v['zhichu']}</td>
+                                        <td>{$v['amount']}</td>
+                                        <td>{$v['bus_name']}</td>
+                                        <td> </td>
+                                        </tr>
+                                    </volist>
+                                </volist>
+                            </volist>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>合计</td>
+                                <td>{$total['shouru']}</td>
+                                <td>{$total['zhichu']}</td>
+                                <td>{$total['amount']}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="12">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block>
+
+<block name="style" >
+    <link href="__ADMIN__/css/plugins/footable/footable.core.css" rel="stylesheet">
+</block>
+
+<block name="script">
+    <script src="__ADMIN__/js/plugins/footable/footable.all.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+
+        });
+    </script>
+</block>

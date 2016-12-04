@@ -1,0 +1,133 @@
+<extend name="Public:base" />
+
+<block name="body">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{$goods_type_name}采购明细表</h5>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            <form action="{:U('?'.$paramstr)}" method="get" class="form-horizontal" id="commentForm">
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <input type="date" name="start_date" value="{$param['start_date']}" class="form-control" placeholder="起始日期">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <input type="date" name="end_date" value="{$param['end_date']}" class="form-control" placeholder="结束日期">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    {:W('Public/getBusiness',array('input_name'=>'bus_id','type'=>'2'))}
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <input type="text" name="bill_no" value="{$param['bill_no']}" class="form-control" placeholder="单据编号">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-sm btn-primary"> 搜索</button>
+
+                                        <a href="javascript:history.go(0)" class="btn btn-sm btn-primary"> 刷新 </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div class="table-responsive">
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="{$number}">
+                            <thead>
+                            <tr>
+                                <th>单据编号</th>
+                                <th>单据日期</th>
+                                <th>供应商</th>
+                                <th>单据类型</th>
+                                <th>业务类型</th>
+                                <th>购货人员</th>
+                                <th>结算账户</th>
+                                <th>购货总金额</th>
+                                <th>折扣后金额</th>
+                                <th>付款总金额</th>
+                                <th>本次欠款</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <volist name="_list" id="vo">
+                                <tr>
+                                    <td>{$vo['bill_no']}</td>
+                                    <td>{$vo['bill_date']}</td>
+                                    <td>{$vo['bus_name']}</td>
+                                    <td>{$vo['bill_type']}</td>
+                                    <td>{$vo['trans_type_name']}</td>
+                                    <td>{$vo['pur_sale_realname']}</td>
+                                    <td>{$vo['acc_name']}</td>
+                                    <td>{$vo['total_amount']}</td>
+                                    <td>{$vo['amount']}</td>
+                                    <td>{$vo['rp_amount']}</td>
+                                    <td>{$vo['arrears']}</td>
+                                    <td><a href="{:U('Admin/ReportPur/purDetail', array('bill_no'=>$vo['bill_no']))}" >单据明细</a></td>
+                                </tr>
+                            </volist>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>合计</td>
+                                <td>{$total['amount']}</td>
+                                <td>{$total['rp_amount']}</td>
+                                <td>{$total['arrears']}</td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="12">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block>
+
+<block name="style" >
+    <link href="__ADMIN__/css/plugins/footable/footable.core.css" rel="stylesheet">
+</block>
+
+<block name="script">
+    <script src="__ADMIN__/js/plugins/footable/footable.all.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+
+        });
+    </script>
+</block>

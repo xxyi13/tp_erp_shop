@@ -39,7 +39,8 @@
                                 <th>账户名称</th>
                                 <th>账户号</th>
                                 <th>账户类型</th>
-                                <th>账户余额</th>
+                                <th>账户起初余额</th>
+                                <th>现余额</th>
                                 <th>建帐余额日期</th>
                                 <th>创建时间</th>
                                 <th>更新时间</th>
@@ -57,6 +58,7 @@
                                     <td>{$vo['account_number']}</td>
                                     <td>{$account_type[$vo['type']]}</td>
                                     <td>{$vo['amount']}</td>
+                                    <td>{:getAccountAmount($vo['id'], $vo['amount'])}</td>
                                     <td>{$vo['amount_date']}</td>
                                     <td>{$vo['created_at']}</td>
                                     <td>{$vo['updated_at']}</td>
@@ -72,6 +74,9 @@
                         </table>
                     </div>
 
+                    <div class=" row pagination ">
+                        　　{$_page}
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,155 @@
+<extend name="Public:base" />
+
+<block name="body">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>仓库盘点</h5>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <include file="Goods/goods_search" />
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="javascript:void(0)" url="{:U('exportInventory?'.$paramstr)}" title="添加{$goods_type_name}" class="btn btn-sm btn-primary" id="export"> 导出系统库存</a>
+
+                            <!--<a href="javascript:void(0)" class="btn btn-sm btn-primary"> 生成盘点单据 </a>-->
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <form action="" method="post" id="inventory-form">
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="100">
+                            <thead>
+                            <tr data-id="{$vo['id']}" data-inventory="">
+                                <th></th>
+                                <th>编号</th>
+                                <th>名称</th>
+                                <th>分类</th>
+                                <th>规格型号</th>
+                                <th data-hide="all">条形码</th>
+                                <th>仓库</th>
+                                <th>计量单位</th>
+                                <th>剩余库存</th>
+
+                                <th data-hide="all">预警：最低库存-最高库存</th>
+                                <th data-hide="all">价格：采购价-零售价-批发价-VIP价格</th>
+                                <th data-hide="all">折扣1-折扣2(%)</th>
+                                <th data-hide="all">期初:数量-单位成本-总价</th>
+                                <th data-hide="all">创建时间</th>
+                                <th data-hide="all">描述</th>
+
+                                <th>盘点库存</th>
+                                <th>盘亏盘赢</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <volist name="_list" id="vo">
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        {$vo['id']}
+                                    </td>
+                                    <td>{$vo['name']}</td>
+                                    <td>{$goods_category[$vo['category']]}</td>
+                                    <td>{$vo['spec']}</td>
+                                    <td>{$vo['bar_code']}</td>
+                                    <td>{$goods_storage_house[$vo['storage_house']]}</td>
+                                    <td>{$unit_list[$vo['unit']]}</td>
+                                    <td>{$vo['total_qty']|default='0'}</td>
+
+                                    <td>{$vo['min_inventory']}-{$vo['max_inventory']}</td>
+                                    <td>{$vo['purchase_price']}-{$vo['sale_price']}-{$vo['wholesale_price']}-{$vo['vip_price']}</td>
+                                    <td>{$vo['discount_rate_1']}-{$vo['discount_rate_2']}</td>
+                                    <td>{$vo['st_quantity']}-{$vo['st_unit_cost']}-{$vo['st_amount']}</td>
+                                    <td>{$vo['created_at']}</td>
+                                    <td>{$vo['memo']}</td>
+
+                                    <td>
+                                        <input type="text" name="d1[{$vo['id']}]" value="" data-id="{$vo['id']}" class="input-sm form-control set-row-qty">
+                                    </td>
+                                    <td>
+                                        <span class="input-sm form-control"></span>
+                                        <input type="hidden" name="d2[{$vo['id']}]" value="">
+                                    </td>
+                                </tr>
+                            </volist>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="9">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block>
+
+<block name="style" >
+    <link href="__ADMIN__/css/plugins/footable/footable.core.css" rel="stylesheet">
+</block>
+
+<block name="script">
+    <script src="__ADMIN__/js/plugins/footable/footable.all.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+
+
+            $(".set-row-qty").change(function () {
+                data_id = $(this).attr('data-id');
+
+                system_qty = $(this).parent().parent().children().eq(8).text(); //  系统库存
+                storage_qty = $(this).val();    //  实际仓库剩余
+
+                //  计算盘点亏盈数量
+                if( storage_qty == '' || storage_qty == 'undefined' ) {
+                    deficit = '';
+                }else{
+                    deficit = Subtr( storage_qty, system_qty ) * 1;
+                }
+
+                if( deficit < 0 ) {
+//                    $(this).parent().parent().attr('0');    //  亏
+                    $(this).parent().next().children().addClass('color-red');
+                }else{
+//                    $(this).parent().parent().attr('1');    //  赢
+                    $(this).parent().next().children().removeClass('color-red');
+                }
+
+                $("input[name='d2["+data_id+"]']").val(deficit);
+
+                $(this).parent().next().children('span').text(deficit);
+            });
+
+
+            /**
+             * 导出
+             */
+            $("#export").click(function () {
+                url = $(this).attr('url');
+                param = $("#inventory-form").serialize();
+
+                window.location.href = url+'?'+param;
+            });
+        });
+
+    </script>
+</block>

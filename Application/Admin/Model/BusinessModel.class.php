@@ -30,4 +30,67 @@ class BusinessModel extends CommonModel
         array('updated_at', 'datetime', self::MODEL_UPDATE, 'function'),
     );
 
+    /**
+     * 获取商家信息
+     * @param $type
+     * @param bool $field
+     * @param string $id
+     * @return mixed
+     */
+    public function getBusiness( $type, $field = true)
+    {
+        $map['type'] = $type;
+
+        return $this->where($map)->field($field)->select();
+    }
+
+    public function getBusinessById($id, $field = '')
+    {
+        if(empty($field)) {
+            return $this->field(true)->find($id);
+        }
+
+        return $this->where(['id'=>$id])->getField($field);
+    }
+
+
+    public function getSummarySupply($bill_type = '')
+    {
+        list($map, $param, $paramstr) = $this->setMapDeleted('bus')->setMapDeleted('inv_info')->setMapBillType('inv_info', $bill_type)->setMapBillDate('inv_info')->setMapBusId('inv_info')->getMapParam();
+
+        $fields = 'bus.id as bus_id, bus.name as bus_name, inv_info.price, sum(inv_info.qty) as qty, sum(inv_info.amount) as amount';
+
+        $model = $this->alias('bus')->join(' left join '.C('DB_PREFIX').'invoice_info as inv_info on inv_info.bus_id = bus.id ');
+
+        $list = $model->where($map)->field($fields)->order('bus.id asc')->group('bus.id')->select();
+
+        $total = ['qty'=>0, 'amount'=>0];
+
+        foreach ($list as $key=>&$value) {
+            $value['unit_name'] = getValue(C('unit_list'), $value['unit'], '未知');
+            $value['storage_house_name'] = getValue(C('goods_storage_house'), $value['storage_house'], '默认仓库');
+            $value['amount'] = abs($value['amount']);
+
+            $total['qty'] += $value['qty'];
+            $total['amount'] += $value['amount'];
+        }
+
+        return [$list, count($list) + 1, $total, $param, $paramstr];
+    }
+
+    /**
+     * 采购汇总表(按供应商)
+     */
+    public function purSummarySupply()
+    {
+        return $this->getSummarySupply('11');
+    }
+
+    /**
+     * 销售汇总表(按客户)
+     */
+    public function saleSummaryCustomer()
+    {
+        return $this->getSummarySupply('21');
+    }
 }

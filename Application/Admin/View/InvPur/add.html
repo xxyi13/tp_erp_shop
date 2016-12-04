@@ -1,0 +1,491 @@
+<extend name="Public:base" />
+
+<block name="body">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-title">
+                    <h5>购货单</h5>
+                </div>
+
+                <form action="{:U('save')}" method="post" class="form-horizontal ajax-form" id="commentForm" >
+                    <input type="hidden" name="inv[trans_type]" value="{$trans_type}">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">供应商：</label>
+                                    <div class="col-sm-8">
+                                        {:W('Public/getBusiness',array('input_name'=>'inv[bus_id]','type'=>'2'))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">单据日期：</label>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="input-sm form-control" name="inv[bill_date]" placeholder="单据日期" value="{:date('Y-m-d')}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">购货人：</label>
+                                    <div class="col-sm-8">
+                                        {:W('Public/getPurSaleUser',array('input_name'=>'inv[pur_sale_id]'))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">单据编号：</label>
+                                    <div class="col-sm-8">
+                                        <input type="hidden" name="inv[bill_no]" value="{$bill_no}">
+                                        <span class="input-sm form-control">{$bill_no}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="hr-line-dashed" style="margin: auto;"></div>
+
+                        <div class="table-responsive goods-table-list">
+                            <table class="table ">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <a href="{:U('getGoods')}" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#goods-modal" title="添加商品">new</a>
+                                        <!--<a href="javascript:void(0)" class="btn btn-primary btn-xs add-row"title="添加商品">new</a>-->
+                                    </th>
+                                    <th>商品</th>
+                                    <th>单位</th>
+                                    <th>仓库</th>
+                                    <th>数量</th>
+                                    <th>购货单价</th>
+                                    <th>折扣率(%)</th>
+                                    <th>折扣额</th>
+                                    <th>购货金额</th>
+                                    <th>备注</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <!--<tr id="tr_1" data-sort="1">
+                                        <td>1<input type="hidden" name="data[0][goods_id]" value="" class="input-sm form-control"></td>
+                                        <td>
+                                            <input type="text" name="data[0][goods_name]" value="" class="input-sm form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="data[0][unit]" value="" class="input-sm form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="data[0][storage_house]" value="" class="input-sm form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="data[0][qty]" value="" class="input-sm form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="data[0][price]" value="" class="input-sm form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="data[0][dis_rate]" value="" class="input-sm form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="data[0][dis_amount]" value="" class="input-sm form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="data[0][amount]" value="" class="input-sm form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="data[0][memo]" value="" class="input-sm form-control">
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0)" class="btn btn-warning btn-xs del-row" title="删除行">删除</a>
+                                        </td>
+                                    </tr>-->
+                                </tbody>
+                                <tfoot style="display: none">
+                                    <tr>
+                                        <td> </td>
+                                        <td>合计</td>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td>
+                                            <input type="hidden" name="inv[total_qty]" value="0">
+                                            <span class="input-sm form-control" id="all_qty"></span>
+                                        </td>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td><span class="input-sm form-control" id="all_dis_amount"></span></td>
+                                        <td><span class="input-sm form-control" id="all_amount"></span></td>
+                                        <td> </td>
+                                        <td> </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="hr-line-dashed" style="margin: auto;"></div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <textarea class="input-sm form-control" style="width: 98%; margin-left: 1%;" name="inv[memo]" placeholder="备注信息"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="row">
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">购货总金额：</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="inv[total_amount]" value="0.00" class="input-sm form-control set-amount">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">优惠率(%)：</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="inv[dis_rate]" value="0" class="input-sm form-control set-amount">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">优惠金额：</label>
+                                    <div class="col-sm-7">
+                                        <input type="text"  name="inv[dis_amount]" placeholder="" class="input-sm form-control set-amount" value="0.00">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">优惠后金额：</label>
+                                    <div class="col-sm-7">
+                                        <input type="hidden" class="input-sm form-control set-amount" name="inv[amount]" placeholder="" value="">
+                                        <span class="input-sm form-control">0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label"><eq name="trans_type" value="12">本次退款：<else/>本次付款：</eq></label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="input-sm form-control" name="inv[rp_amount]" placeholder="" value="0.00">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">结算账户：</label>
+                                    <div class="col-sm-7">
+                                        {:W('Public/getAccount',array('input_name'=>'inv[acc_id]'))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">本次欠款：</label>
+                                    <div class="col-sm-7">
+                                        <input type="hidden" class="input-sm form-control" name="inv[arrears]" placeholder="" value="">
+                                        <span class="input-sm form-control">0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="hr-line-dashed" style="margin: auto;"></div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">制单人：</label>
+                                    <div class="col-sm-7">
+                                        <span class="input-sm form-control">{:getAdminUserRealnameById()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group" style="position: fixed; top: 25px; right: 25px;">
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <button class="btn btn-primary" type="submit">保存单据</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="goods-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</block>
+
+<block name="style">
+
+</block>
+
+<block name="script">
+    <script>
+        $(function () {
+
+            /**
+             * 删除
+             */
+            $(".goods-table-list").on("click", ".del-row", function () {
+
+                $(this).prev().val(1);  //  设置该条数据为已删除
+
+                $(this).removeClass("del-row").addClass('undel-row').text("恢复");
+
+                trObj = $(this).parent().parent();
+
+                trObj.addClass('tr-goods-remove');
+                sort = trObj.attr('data-sort');
+
+                $("#tr_"+sort + " :input").attr("readonly", "readonly");
+
+                $("#tr_"+sort).addClass("divider");
+
+                $("input[name='inv[rp_amount]']").val('0.00');
+
+                MyInv.countTotalAmount();
+
+                MyInv.countRpAmount();
+            });
+
+            /**
+             * 取消删除
+             */
+            $(".goods-table-list").on("click", ".undel-row", function () {
+
+                $(this).prev().val(0);  //  设置该条数据为正常
+
+                $(this).removeClass("undel-row").addClass('del-row').text("删除");
+
+                trObj = $(this).parent().parent();
+
+                trObj.removeClass('tr-goods-remove');
+                sort = trObj.attr('data-sort');
+
+                $("#tr_"+sort + " :input").attr("readonly", false);
+
+                $("#tr_"+sort).removeClass("divider");
+
+                $("input[name='inv[rp_amount]']").val('0.00');
+
+                MyInv.countTotalAmount();
+
+                MyInv.countRpAmount();
+            });
+
+            /**
+             * 设置总体 金额
+             */
+            $(".set-amount").change(function () {
+
+                $("input[name='inv[rp_amount]']").val('0.00');
+
+                MyInv.countTotalAmount();
+
+                MyInv.countRpAmount();
+            });
+
+            /**
+             * 设置每行的金额 数量 折扣
+             */
+            $(".goods-table-list").on("change", ".set-row-amount", function () {
+
+                $("input[name='inv[rp_amount]']").val('0.00');
+
+                i = $(this).parent().parent().attr("data-sort") - 1;
+
+                MyInv.countRowAmount(i);
+
+                MyInv.countTotalAmount();
+
+                MyInv.countRpAmount();
+            });
+
+            /**
+             * 设置付款金额
+             */
+            $("input[name='inv[rp_amount]']").change(function () {
+                MyInv.countRpAmount();
+            });
+
+
+        });
+
+        var MyInv = new Object();
+
+        /**
+         * 添加一行商品
+         */
+        MyInv.addRow = function (data) {
+
+            //  减去最后汇总的一行
+            prev_sort = $(".goods-table-list tbody tr").length;
+
+            next_sort = prev_sort + 1;
+
+            html = '<tr id="tr_'+next_sort+'" data-sort="'+next_sort+'">';
+                html += '<td>'+next_sort+'</td>';
+                html += '<td>';
+                    html += '<input type="hidden" name="data['+prev_sort+'][goods_id]" value="'+data[0]+'" class="input-sm form-control">';
+                    html += '<input type="text" name="data['+prev_sort+'][goods_name]" value="'+data[1]+'" class="input-sm form-control">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][unit]" value="'+data[2]+'" class="input-sm form-control">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="hidden" name="data['+prev_sort+'][category]" value="'+data[3]+'" class="input-sm form-control">';
+                    html += '<input type="text" name="data['+prev_sort+'][storage_house]" value="'+data[3]+'" class="input-sm form-control">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][qty]" value="'+data[4]+'" class="input-sm form-control set-row-amount">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][price]" value="'+data[5]+'" class="input-sm form-control set-row-amount">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][dis_rate]" value="'+data[6]+'" class="input-sm form-control set-row-amount">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][dis_amount]" value="'+data[7]+'" class="input-sm form-control set-row-amount">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][amount]" value="'+data[8]+'" class="input-sm form-control">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="text" name="data['+prev_sort+'][memo]" value="'+data[9]+'" class="input-sm form-control">';
+                html += '</td>';
+                html += '<td>';
+                    html += '<input type="hidden" name="data['+prev_sort+'][is_delete]" value="0" class="input-sm form-control">';
+                    html += '<a href="javascript:void(0)" class="btn btn-warning btn-xs del-row" title="删除行">删除</a>';
+                html += '</td>';
+            html += '</tr>';
+
+            $(".goods-table-list tbody").append(html);
+
+            $(".goods-table-list tfoot").show();
+        };
+
+        /**
+         * 设置整体金额
+         */
+        MyInv.countTotalAmount = function () {
+            total_amount = 0;
+            all_qty = 0;
+            all_dis_amount = 0;
+
+            $(".goods-table-list tbody tr").each(function (i, n) {
+
+                if( $(n).hasClass("tr-goods-remove") === false ) {
+                    amount = $(n).children("td").eq(8).children("input[name='data["+i+"][amount]']").val();
+
+                    total_amount = accAdd( total_amount , amount );
+
+                    qty = $(n).children("td").eq(4).children("input[name='data["+i+"][qty]']").val();
+
+                    all_qty = accAdd( all_qty, qty );
+
+                    dis_amount = $(n).children("td").eq(7).children("input[name='data["+i+"][dis_amount]']").val();
+
+                    all_dis_amount = accAdd( all_dis_amount , dis_amount );
+
+                }
+            });
+
+            //  设置table 表格中的汇总计算
+            $("#all_amount").text(total_amount);
+            $("#all_qty").text(all_qty);
+            $("input[name='inv[total_qty]']").val(all_qty);
+            $("#all_dis_amount").text(all_dis_amount);
+
+            $("input[name='inv[total_amount]']").val(total_amount);
+
+            //  折扣率
+            dis_rate = $("input[name='inv[dis_rate]']").val() / 100;
+
+            //  折扣金额
+            dis_amount = accMul( total_amount , dis_rate );
+            $("input[name='inv[dis_amount]']").val( dis_amount );
+
+            //  优惠后金额
+            amount = Subtr( total_amount, dis_amount );
+            $("input[name='inv[amount]']").val( amount );
+            $("input[name='inv[amount]']").next().text( amount );
+
+        };
+
+
+        /**
+         * 设置单个商品金额
+         */
+        MyInv.countRowAmount = function (i) {
+
+            qty = $("input[name='data["+i+"][qty]']").val();
+
+            price = $("input[name='data["+i+"][price]']").val();
+
+            dis_rate = $("input[name='data["+i+"][dis_rate]']").val() / 100;
+
+            amount = accMul( price , qty );
+
+            dis_amount = accMul( amount, dis_rate );
+
+            $("input[name='data["+i+"][dis_amount]']").val( dis_amount );
+
+            amount = Subtr( amount, dis_amount );
+            $("input[name='data["+i+"][amount]']").val( amount );
+        };
+
+        /**
+         * 这是 付款 和欠款金额
+         */
+        MyInv.countRpAmount = function () {
+
+            amount =  $("input[name='inv[amount]']").val();
+
+            rp_amount = $("input[name='inv[rp_amount]']").val();
+
+            arrears = Subtr(rp_amount, amount);
+
+            $("input[name='inv[arrears]']").val( arrears );
+            $("input[name='inv[arrears]']").next().text(arrears);
+        }
+
+    </script>
+</block>
