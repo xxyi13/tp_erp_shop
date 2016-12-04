@@ -1,3 +1,4 @@
 # Created by .ignore support plugin (hsz.mobi)
 /.idea
 /Runtime
+/Application/Common/Conf/config.php
