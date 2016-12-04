@@ -9,10 +9,10 @@ return array(
     // '配置项'=>'配置值'
     'DB_DSN' => '', // 数据库连接DSN 用于PDO方式
     'DB_TYPE' => 'mysqli', // 数据库类型
-    'DB_HOST' => 'localhost', // 服务器地址 192.168.1.139
-    'DB_NAME' => 'tp_erp_shop', // 数据库名
+    'DB_HOST' => '127.0.0.1', // 服务器地址 192.168.1.139
+    'DB_NAME' => 'myerp', // 数据库名
     'DB_USER' => 'root', // 用户名 root
-    'DB_PWD' => 'root', // 密码 root
+    'DB_PWD' => 'fengyan1992', // 密码 root
     'DB_PORT' => 3306, // 端口
     'DB_PREFIX' => '', // 数据库表前缀
 
