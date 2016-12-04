@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2016-12-04 13:10:19
+-- Generation Time: 2016-12-04 13:16:31
 -- 服务器版本： 5.5.52-MariaDB-1ubuntu0.14.04.1
 -- PHP Version: 7.1.0RC6
 
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `ww_erp_shop`
 --
-CREATE DATABASE IF NOT EXISTS `ww_erp_shop` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE `ww_erp_shop`;
 
 -- --------------------------------------------------------
 
